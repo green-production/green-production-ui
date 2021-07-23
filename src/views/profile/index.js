@@ -1,9 +1,5 @@
 import React, { Component } from "react";
 
-import Form from 'react-bootstrap/Form';
-import { Col, Row, Container } from "react-bootstrap";
-import Button from 'react-bootstrap/Button';
-
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -12,82 +8,13 @@ class Profile extends Component {
         };
     }
 
-    componentWillMount() { }
+    componentWillMount() {}
 
     render() {
         return (
-            <Container>
-                <Row className="justify-content-md-center">
-                    <Col xs lg="8">
-                        <Form onSubmit={this.handleSubmit}>
-                            <Row className="mb-3">
-                                <Form.Group as={Col} controlId="formGridUsername">
-                                    <Form.Group as={Col} controlId="formGridFullName">
-                                        <Form.Label>Full Name</Form.Label>
-                                        <Form.Control type="text" placeholder="Enter Full Name" />
-                                    </Form.Group>
-                                    <Form.Label>User Name</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter Username" />
-                                </Form.Group>
-                            </Row>
-                            <Row className="mb-3">
-                                <Form.Group as={Col} controlId="formGridDob">
-                                    <Form.Label>DOB</Form.Label>
-                                    <Form.Control type="date" placeholder="Select Date of Birth" />
-                                </Form.Group>
-                                <Form.Group as={Col} controlId="formGridGender">
-                                    <Form.Label>Gender</Form.Label>
-                                    <Form.Control type="radio" name="gender" value="Male" />Male
-                                    <Form.Control type="radio" name="gender" value="female" />Female
-                                    <Form.Control type="radio" name="gender" value="other" />Others
-                                </Form.Group>
-                            </Row>
-                            <Row className="mb-3">
-                                <Form.Group as={Col} controlId="formGridEmail">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" placeholder="Enter email" />
-                                </Form.Group>
-                                <Form.Group as={Col} controlId="formGridPassword">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Password" />
-                                </Form.Group>
-                            </Row>
-
-                            <Row className="mb-3">
-                                <Form.Group className="mb-3" controlId="formGridAddress1">
-                                    <Form.Label>Address</Form.Label>
-                                    <Form.Control placeholder="1234 Main St" />
-                                </Form.Group>
-                                <Form.Group as={Col} controlId="formGridCity">
-                                    <Form.Label>City</Form.Label>
-                                    <Form.Control />
-                                </Form.Group>
-
-                                <Form.Group as={Col} controlId="formGridState">
-                                    <Form.Label>State</Form.Label>
-                                    <Form.Select defaultValue="Choose...">
-                                        <option>Choose...</option>
-                                        <option>...</option>
-                                    </Form.Select>
-                                </Form.Group>
-
-                                <Form.Group as={Col} controlId="formGridZip">
-                                    <Form.Label>Zip</Form.Label>
-                                    <Form.Control />
-                                </Form.Group>
-                            </Row>
-
-                            <Form.Group className="mb-3" id="formGridCheckbox">
-                                <Form.Check type="checkbox" label="Check me out" />
-                            </Form.Group>
-
-                            <Button variant="primary" type="submit">
-                                Submit
-                            </Button>
-                        </Form>
-                    </Col>
-                </Row>
-            </Container>
+            <div>
+                Profile Page
+            </div>
         );
     }
 }
