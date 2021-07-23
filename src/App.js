@@ -11,7 +11,7 @@ import PrivateRoute from "guards/auth-route";
 import Header from 'views/header/index';
 import Footer from "views/footer/index";
 import GlobalLoader from "components/loader/global-loader";
-import Roles from "constants/roles"
+import Roles from "constants/roles";
 import "./App.scss";
 import "styles/common.scss";
 
@@ -57,7 +57,7 @@ const Main = props => {
                                 render={() => (
                                     <PrivateRoute 
                                         user={props.data}
-                                        allowed={2}
+                                        allowed={1}
                                         component={Profile}
                                     />)} 
                             />
