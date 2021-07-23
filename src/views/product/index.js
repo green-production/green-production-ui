@@ -13,7 +13,7 @@ class Product extends Component {
     render() {
         return (
             <div>
-                Product Page
+                Products
             </div>
         );
     }
