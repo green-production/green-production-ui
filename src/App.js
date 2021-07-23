@@ -1,7 +1,6 @@
 /*eslint-disable */
 import React, { Suspense, lazy, Component } from "react";
 import {
-    BrowserRouter as Router,
     Switch,
     Route
 } from "react-router-dom";
@@ -21,6 +20,8 @@ const Product = lazy(() => import("views/product/index"));
 
 
 const Main = props => {
+    
+
     return (
         <div className="App">
                 {
@@ -33,8 +34,9 @@ const Main = props => {
                         <Route 
                             exact={true}
                             path="/" 
-                            render={() => (
+                            render={prop => (
                                 <PrivateRoute 
+                                    {...prop}
                                     user={props.data}
                                     allowed={1}
                                     component={Dashboard}
@@ -44,8 +46,9 @@ const Main = props => {
                             <Route 
                                 exact 
                                 path="/login" 
-                                render={() => (
+                                render={prop => (
                                     <PrivateRoute 
+                                        {...prop}
                                         user={props.data}
                                         allowed={1}
                                         component={Login}
@@ -54,10 +57,11 @@ const Main = props => {
                             <Route 
                                 exact 
                                 path="/profile" 
-                                render={() => (
+                                render={prop => (
                                     <PrivateRoute 
+                                        {...prop}
                                         user={props.data}
-                                        allowed={2}
+                                        allowed={1}
                                         component={Profile}
                                     />)} 
                             />
@@ -100,22 +104,16 @@ class App extends Component {
         const json = await import('constants/json/get-user-info.json')
         this.setState({userData: json.default}) //initial dummy data
     }
-    
-    componentWillMount() {
-        
-    }
 
     render() {
         const {userData} = this.state
 
         return (
-            <Router>
-                <div>
-                    <Main 
-                        data={userData} 
-                        access={Roles[userData?.Type]} />
-                </div>
-            </Router>
+            <div className="main">
+                <Main 
+                    data={userData} 
+                    access={Roles[userData?.Type]} />
+            </div>
         )
     }
 };

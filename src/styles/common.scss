@@ -31,9 +31,20 @@ p { margin: 0 0 1em 0; }
 a { color: #007eff; }
 a:visited { color: #65b1ff }
 
-a.btn { font-size: 1.2em; text-decoration: none; color: #fff; border: 1px solid #fff; padding: 4px 15px; 
+button.btn { font-size: 1.2em; text-decoration: none; color: #fff; border: 1px solid #fff; padding: 4px 15px; 
 	transition: background-color .5s; }
-a.btn:hover { background-color: rgba(0,0,0,.3); }
+button.btn:hover { background-color: rgba(0,0,0,.3); }
+
+button.sub-header {
+	background-color: rgba(0, 0, 0, 0);
+}
+div.btn-login-wrapper {
+	width: 100%;
+	z-index: 1;
+	.login-btn {
+		float: right;
+	}
+}
 
 /*Header*/
 
@@ -165,6 +176,10 @@ nav ul ul ul { left: 100%; top: 0; }
 
 nav > ul { padding-left: 200px; }
 nav > ul > li { float: left; }
+nav > ul > li.login-li {
+	float: right;
+	margin-right: 1rem;
+}
 nav > ul > li > a { width: auto; padding: 10px 20px 15px 20px; }
 
 nav a[aria-haspopup="true"]::after {
@@ -185,13 +200,13 @@ nav > ul > li > a[aria-haspopup="true"]::after {
 
 /* Footer */
 
-footer { font-size: 0.8em; margin: 40px; color: #999; }
+// footer { font-size: 0.8em; margin: 40px; color: #999; }
 
-footer .content { display: inline; }
+// footer .content { display: inline; }
 
-footer a { margin-left: 30px; color: #777; }
-footer a:visited { color: #777; }
-footer a:hover { color: #000; }
+// footer a { margin-left: 30px; color: #777; }
+// footer a:visited { color: #777; }
+// footer a:hover { color: #000; }
 
 /* Media queries */
 

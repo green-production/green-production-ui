@@ -8,7 +8,7 @@ class Profile extends Component {
         };
     }
 
-    componentWillMount() {}
+    componentDidMount() {}
 
     render() {
         return (

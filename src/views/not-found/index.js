@@ -8,7 +8,7 @@ class NotFound extends Component {
         };
     }
 
-    componentWillMount() {}
+    componentDidMount() {}
 
     render() {
         return (
