@@ -84,7 +84,6 @@ class Profile extends Component {
                             <Button variant="primary" type="submit">
                                 Submit
                             </Button>
-
                         </Form>
                     </Col>
                 </Row>
