@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 
-import Form from 'react-bootstrap/Form'
-import ReactDOM from "react-dom";
+import Form from 'react-bootstrap/Form';
 import { Col, Row, Container } from "react-bootstrap";
-import Button from 'react-bootstrap/Button'
-import Bootstrap from "react-bootstrap";
-
+import Button from 'react-bootstrap/Button';
 
 class Profile extends Component {
     constructor(props) {
@@ -24,6 +21,28 @@ class Profile extends Component {
                     <Col xs lg="8">
                         <Form onSubmit={this.handleSubmit}>
                             <Row className="mb-3">
+                                <Form.Group as={Col} controlId="formGridUsername">
+                                    <Form.Group as={Col} controlId="formGridFullName">
+                                        <Form.Label>Full Name</Form.Label>
+                                        <Form.Control type="text" placeholder="Enter Full Name" />
+                                    </Form.Group>
+                                    <Form.Label>User Name</Form.Label>
+                                    <Form.Control type="text" placeholder="Enter Username" />
+                                </Form.Group>
+                            </Row>
+                            <Row className="mb-3">
+                                <Form.Group as={Col} controlId="formGridDob">
+                                    <Form.Label>DOB</Form.Label>
+                                    <Form.Control type="date" placeholder="Select Date of Birth" />
+                                </Form.Group>
+                                <Form.Group as={Col} controlId="formGridGender">
+                                    <Form.Label>Gender</Form.Label>
+                                    <Form.Control type="radio" name="gender" value="Male" />Male
+                                    <Form.Control type="radio" name="gender" value="female" />Female
+                                    <Form.Control type="radio" name="gender" value="other" />Others
+                                </Form.Group>
+                            </Row>
+                            <Row className="mb-3">
                                 <Form.Group as={Col} controlId="formGridEmail">
                                     <Form.Label>Email</Form.Label>
                                     <Form.Control type="email" placeholder="Enter email" />
@@ -34,12 +53,11 @@ class Profile extends Component {
                                 </Form.Group>
                             </Row>
 
-                            <Form.Group className="mb-3" controlId="formGridAddress1">
-                                <Form.Label>Address</Form.Label>
-                                <Form.Control placeholder="1234 Main St" />
-                            </Form.Group>
-
                             <Row className="mb-3">
+                                <Form.Group className="mb-3" controlId="formGridAddress1">
+                                    <Form.Label>Address</Form.Label>
+                                    <Form.Control placeholder="1234 Main St" />
+                                </Form.Group>
                                 <Form.Group as={Col} controlId="formGridCity">
                                     <Form.Label>City</Form.Label>
                                     <Form.Control />
