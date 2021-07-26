@@ -8,7 +8,18 @@ class Profile extends Component {
         super(props);
         this.state = {
             pageLoading: true,
-            username: "soumyadas",
+            userdata: {
+                dob: "09/11/1985",
+                email: "john@gmail.com",
+                gender: "male",
+                name: "John Doe",
+                password: "12345678",
+                securityAnswer1: "kolkata",
+                securityAnswer2: "cod",
+                securityQuestion1: "Where did you born?",
+                securityQuestion2: "What is your favourite game?",
+                username: "soumyadas"
+            }
             
         };
     }
