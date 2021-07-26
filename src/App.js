@@ -11,6 +11,7 @@ import Header from 'views/header/index';
 import Footer from "views/footer/index";
 import GlobalLoader from "components/loader/global-loader";
 import Roles from "constants/roles"
+import AuthContextProvider from "context/authContext"
 import "./App.scss";
 import "styles/common.scss";
 
@@ -25,57 +26,59 @@ const Main = props => {
     return (
         <div className="App">
                 {
-                    !location.pathname.includes('login') ? <Header /> : ''
+                    !location.pathname.includes('login') && <Header />
                 }
                 {
                     props.data
                     ?
                     <Switch>
-                        <Route 
-                            exact={true}
-                            path="/" 
-                            render={prop => (
-                                <PrivateRoute 
-                                    {...prop}
-                                    user={props.data}
-                                    allowed={1}
-                                    component={Dashboard}
-                                />)} 
-                        />
-                        <Suspense fallback={GlobalLoader}>
+                        <AuthContextProvider>
                             <Route 
-                                exact 
-                                path="/login" 
+                                exact={true}
+                                path="/" 
                                 render={prop => (
                                     <PrivateRoute 
                                         {...prop}
                                         user={props.data}
                                         allowed={1}
-                                        component={Login}
+                                        component={Dashboard}
                                     />)} 
                             />
-                            <Route 
-                                exact 
-                                path="/profile" 
-                                render={prop => (
-                                    <PrivateRoute 
-                                        {...prop}
-                                        user={props.data}
-                                        allowed={1}
-                                        component={Profile}
-                                    />)} 
-                            />
-                            <Route 
-                                exact 
-                                path="/product/:id" 
-                                render={() => (
-                                    <PrivateRoute 
-                                        user={props.data}
-                                        allowed={1}
-                                        component={Product}
-                                    />)} 
-                            />
-                        </Suspense>
+                            <Suspense fallback={GlobalLoader}>
+                                <Route 
+                                    exact 
+                                    path="/login" 
+                                    render={prop => (
+                                        <PrivateRoute 
+                                            {...prop}
+                                            user={props.data}
+                                            allowed={1}
+                                            component={Login}
+                                        />)} 
+                                />
+                                <Route 
+                                    exact 
+                                    path="/profile" 
+                                    render={prop => (
+                                        <PrivateRoute 
+                                            {...prop}
+                                            user={props.data}
+                                            allowed={1}
+                                            component={Profile}
+                                        />)} 
+                                />
+                                <Route 
+                                    exact 
+                                    path="/product/:id" 
+                                    render={() => (
+                                        <PrivateRoute 
+                                            user={props.data}
+                                            allowed={1}
+                                            component={Product}
+                                        />)} 
+                                />
+                            </Suspense>
+                        </AuthContextProvider>
                     </Switch>
                     :
                     <GlobalLoader />
@@ -85,7 +88,7 @@ const Main = props => {
                     path="/not-found" 
                     component={NotFound}/>
                 {
-                    !location.pathname.includes('login') ? <Footer /> : ''
+                    !location.pathname.includes('login') && <Footer />
                 }
         </div>
     );

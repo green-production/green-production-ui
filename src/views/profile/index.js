@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Tabs, Tab, Col, Row, Container } from "react-bootstrap";
+import { Tabs, Tab, Col, Row } from "react-bootstrap";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import {AuthContext} from '../../context/authContext'
 
 class Profile extends Component {
+    static contextType = AuthContext;
     constructor(props) {
         super(props);
         this.state = {
@@ -24,7 +26,12 @@ class Profile extends Component {
         };
     }
 
-    componentDidMount() { }
+    componentDidMount() {
+        const { isAuthenticated } = this.context;
+        if(!isAuthenticated) {
+            this.props.history.push('/login')
+        }
+    }
 
     render() {
         return (

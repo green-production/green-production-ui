@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import GoogleLogin from 'react-google-login';
+import {AuthContext} from '../../context/authContext'
+import {InputForm, Dropdown} from '../../components/form-inputs/index'
 import "./index.scss";
 
 const recaptchaRef = React.createRef();
 
 class Login extends Component {
+    static contextType = AuthContext;
     constructor(props) {
         super(props);
         this.state = {
@@ -33,7 +36,10 @@ class Login extends Component {
     }
     
     componentDidMount() {
-
+        const { isAuthenticated } = this.context;
+        if(isAuthenticated) {
+            this.props.history.push('/')
+        }
     }
 
     handleSubmit = e => {
@@ -42,6 +48,8 @@ class Login extends Component {
 
         const value = Object.fromEntries(data.entries());
         this.setState({formData: value})
+        const { dispatch } = this.context;
+        dispatch({ type: 'LOGIN-LOGOUT' })
         this.props.history.push('/')
     }
 
@@ -76,15 +84,26 @@ class Login extends Component {
         console.log('token', captchaToken)
     }
 
-    responseGoogle = (response) => {
-        console.log(response);
-        // const res = response.profileObj;
-        // console.log(res);
-        // this.signup(response);
+    successResponseGoogle = res => {
+        console.log(res);
+        const googleResponse = {
+            name: res.profileObj.name,
+            email: res.profileObj.email,
+            image: res.profileObj.imageUrl,
+            googleId: res.googleId,
+            token: res.tokenId,
+            provider: 'Google'
+        }
+        const { dispatch } = this.context;
+        dispatch({ type: 'LOGIN-LOGOUT' })
+        this.props.history.push('/')
+    }
+
+    failureResponseGoogle = err => {
+        console.log(err);
     }
 
     render() {
-
         return (
             <div>
                 <div className="signup__container">
@@ -101,7 +120,7 @@ class Login extends Component {
                                     this.state.isLogin
                                     ?
                                     <React.Fragment>
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="usernameEmail"
                                             type="text"
                                             value={this.state.usernameEmail}
@@ -109,7 +128,7 @@ class Login extends Component {
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="password"
                                             type="password"
                                             value={this.state.password}
@@ -120,7 +139,7 @@ class Login extends Component {
                                     </React.Fragment>
                                     :
                                     <React.Fragment>
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="name"
                                             type="text"
                                             value={this.state.name}
@@ -128,7 +147,7 @@ class Login extends Component {
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="username"
                                             type="text"
                                             value={this.state.username}
@@ -136,7 +155,7 @@ class Login extends Component {
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="email"
                                             type="text"
                                             value={this.state.email}
@@ -144,7 +163,7 @@ class Login extends Component {
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="password"
                                             type="password"
                                             value={this.state.password}
@@ -152,7 +171,7 @@ class Login extends Component {
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="passwordRepeat"
                                             type="password"
                                             value={this.state.passwordRepeat}
@@ -160,7 +179,7 @@ class Login extends Component {
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="dob"
                                             type="text"
                                             value={this.state.dob}
@@ -168,19 +187,19 @@ class Login extends Component {
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
-                                        <Dropdown 
+                                        <DropdownFn 
                                             id="gender" 
                                             label="Gender"
                                             value={this.state.gender}
                                             changeFn={this.handleInputChange}
                                         />
-                                        <Dropdown 
+                                        <DropdownFn 
                                             id="securityQuestion1"
                                             label="Security question 1"
                                             value={this.state.securityQuestion1}
                                             changeFn={this.handleInputChange}
                                         />
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="securityAnswer1"
                                             type="text"
                                             value={this.state.securityAnswer1}
@@ -188,13 +207,13 @@ class Login extends Component {
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
-                                        <Dropdown 
+                                        <DropdownFn 
                                             id="securityQuestion2"
                                             label="Security question 2"
                                             value={this.state.securityQuestion2}
                                             changeFn={this.handleInputChange}
                                         />
-                                        <InputForm 
+                                        <InputFormFn 
                                             id="securityAnswer2"
                                             type="text"
                                             value={this.state.securityAnswer2}
@@ -208,7 +227,7 @@ class Login extends Component {
                                 <div className="form-group captcha">
                                     <ReCAPTCHA
                                         ref={recaptchaRef}
-                                        sitekey="6LdiHqYUAAAAAESfe6F91S3iRfkQ_i-fHW6GcVRz"
+                                        sitekey={process.env.REACT_APP_GOOGLE_CAPTCHA}
                                         onChange={this.captchaChange}
                                     />
                                 </div>
@@ -220,18 +239,22 @@ class Login extends Component {
                                         value={this.state.isLogin ? 'Login' : 'Register'}
                                     />
                                 </div>
-                                <div className="google-login">
-                                    <GoogleLogin
-                                        clientId="1066685436606-rs3sveemdvqhfm56hljf70cvs2n077ed.apps.googleusercontent.com"
-                                        buttonText="Login with Google"
-                                        onSuccess={this.responseGoogle}
-                                        onFailure={this.responseGoogle}>
-                                    </GoogleLogin>
-                                </div>
+                                {
+                                    this.state.isLogin &&
+                                    <div className="google-login">
+                                            <GoogleLogin
+                                                clientId={process.env.REACT_APP_GOOGLE_CLIENT}
+                                                buttonText="Login with Google"
+                                                style={{transform: "scale(0.7)"}}
+                                                onSuccess={this.successResponseGoogle}
+                                                onFailure={this.failureResponseGoogle}>
+                                            </GoogleLogin>
+                                    </div>
+                                }
                             </form>
                         </div>
                         <button className="signup__link" onClick={this.loginForm}>
-                            {this.state.isLogin ? 'Register' : 'Login' }
+                            {this.state.isLogin ? 'Register' : 'Login'}
                         </button>
                     </div>
                 </div>
@@ -242,37 +265,28 @@ class Login extends Component {
 
 export default Login;
 
-const InputForm = props => {
+const InputFormFn = props => {
     return (
-        <div className="form-group">
-            <label htmlFor={props.id}></label>
-            <input
-                className="form-control"
-                type={props.type}
-                name={props.id}
-                value={props.value || ''}
-                id={props.id}
-                placeholder={props.placeholder}
-                onChange={props.changeFn}
-                required={props.isRequired}
-            />
-        </div>
+        <InputForm
+            type={props.type}
+            name={props.id}
+            value={props.value || ''}
+            id={props.id}
+            placeholder={props.placeholder}
+            onChange={props.changeFn}
+            required={props.isRequired}>
+        </InputForm>
     )
 }
 
-const Dropdown = ({label, id, value, changeFn}) => {
+const DropdownFn = ({label, id, value, changeFn}) => {
     return (
-        <div className="form-group">
-            <label htmlFor={id}></label>
-            <select 
-                name={id}
-                id={id}
-                value={value} 
-                required
-                onChange={changeFn}>
-                {id === 'gender' ? <OptionsGender label={label} /> : <OptionsQuestions label={label} />}
-            </select>
-        </div>
+        <Dropdown 
+            id={id}
+            value={value}
+            changeFn={changeFn}>
+            {id === 'gender' ? <OptionsGender label={label} /> : <OptionsQuestions label={label} />}
+        </Dropdown>
     )
 }
 
