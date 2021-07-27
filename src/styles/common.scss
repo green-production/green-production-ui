@@ -57,9 +57,9 @@ header {
 header a.logo {
 	z-index: 1;
 	position : absolute;
-	display: block; width: 160px; height: 66px;
-	background: url(../assets/images/logo.svg) 0 0; background-size: contain;
-	top: 15px; left: 20px;
+	display: block; width: 200px; height: 95px;
+	background: url(../assets/images/greenytale_4.png) no-repeat 0 0; background-size: cover;
+	top: -18px; left: 0;
 }
 header a.logo span { display: none; }
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Tabs, Tab, Col, Row } from "react-bootstrap";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import {AuthContext} from '../../context/authContext'
+import { AuthContext } from '../../context/authContext'
 
 class Profile extends Component {
     static contextType = AuthContext;
@@ -10,27 +10,19 @@ class Profile extends Component {
         super(props);
         this.state = {
             pageLoading: true,
-            userdata: {
-                dob: "09/11/1985",
-                email: "john@gmail.com",
-                gender: "male",
-                name: "John Doe",
-                password: "12345678",
-                securityAnswer1: "kolkata",
-                securityAnswer2: "cod",
-                securityQuestion1: "Where did you born?",
-                securityQuestion2: "What is your favourite game?",
-                username: "soumyadas"
-            }
-            
+            userData: null,
+            isEdit: false
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const { isAuthenticated } = this.context;
-        if(!isAuthenticated) {
+        if (!isAuthenticated) {
             this.props.history.push('/login')
         }
+        const file = await import('../../constants/json/get-user-info');
+        this.setState({ userData: file.default });
+        console.log(this.state.userData);
     }
 
     render() {
@@ -38,9 +30,10 @@ class Profile extends Component {
             <div className="container bootstrap snippet">
                 <div className="row">
                     <div className="col-sm-10">
-                        <h1>User name</h1>
+                        <h1>{this.state.userData?.FullName}</h1>
                     </div>
                     <div className="col-sm-2">
+                        <Button variant="primary" type="submit">Edit Profile</Button>
                     </div>
                 </div>
                 <div className="row">
@@ -76,143 +69,120 @@ class Profile extends Component {
                     </div>
 
                     <div className="col-sm-9">
-                        <Tabs
-                            defaultActiveKey="home"
-                            transition={false}
-                            id="noanim-tab-example"
-                            className="mb-3"
-                        >
-                            <Tab eventKey="home" title="Home">
-                                <Form onSubmit={this.handleSubmit}>
-                                    <Form.Group as={Row} className="mb-3" controlId="formFullName">
-                                        <Form.Label column sm="2">
-                                            Full Name
-                                        </Form.Label>
-                                        <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue="Soumya Das" />
-                                        </Col>
-                                    </Form.Group>
-                                    <Form.Group as={Row} className="mb-3" controlId="formFullName">
-                                        <Form.Label column sm="2">
-                                            Email
-                                        </Form.Label>
-                                        <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue="soumya@gmail.com" />
-                                        </Col>
-                                    </Form.Group>
-                                    <Form.Group as={Row} className="mb-3" controlId="gender">
-                                        <Form.Label column sm="2">
-                                            Gender
-                                        </Form.Label>
-                                        <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue="Male" />
-                                        </Col>
-                                    </Form.Group>
-                                    <Form.Group as={Row} className="mb-3" controlId="gender">
-                                        <Form.Label column sm="2">
-                                            Registered Date
-                                        </Form.Label>
-                                        <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue="24 July 2021" />
-                                        </Col>
-                                    </Form.Group>
-                                </Form>
-                            </Tab>
-                            <Tab eventKey="profile" title="Profile">
-                                <Form onSubmit={this.handleSubmit}>
-                                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                                        <Form.Label column sm="2">
-                                            Username
-                                        </Form.Label>
-                                        <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue="soumya@gmail.com" />
-                                        </Col>
-                                    </Form.Group>
+                        {}
+                        <Form onSubmit={this.handleSubmit}>
+                            <Form.Group as={Row} className="mb-3" controlId="formFullName">
+                                <Form.Label column sm="2">
+                                    Full Name
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="Soumya Das" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="formFullName">
+                                <Form.Label column sm="2">
+                                    Email
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="soumya@gmail.com" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="gender">
+                                <Form.Label column sm="2">
+                                    Gender
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="Male" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="fomDob">
+                                <Form.Label column sm="2">
+                                    DOB
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="24 July 2021" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="formstreetaddress1">
+                                <Form.Label column sm="2">
+                                    Street Address 1
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="Baranagar" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="formstreetaddress2">
+                                <Form.Label column sm="2">
+                                    Street Address 2
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="Kolkata" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="formCity">
+                                <Form.Label column sm="2">
+                                    City
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="Kolkata" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="formState">
+                                <Form.Label column sm="2">
+                                    State
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="WB" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="formZip">
+                                <Form.Label column sm="2">
+                                    Zip
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="700035" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="formRole">
+                                <Form.Label column sm="2">
+                                    Role
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="Seller" />
+                                </Col>
+                            </Form.Group>
+                        </Form>
+                        <Form onSubmit={this.handleSubmit}>
+                            <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                                <Form.Label column sm="2">
+                                    Username
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control plaintext readOnly defaultValue="soumya@gmail.com" />
+                                </Col>
+                            </Form.Group>
 
-                                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
-                                        <Form.Label column sm="2">
-                                            Password
-                                        </Form.Label>
-                                        <Col sm="10">
-                                            <Form.Control type="password" placeholder="Password" />
-                                        </Col>
-                                    </Form.Group>
-                                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                                        <Form.Label column sm="2">
-                                            Email
-                                        </Form.Label>
-                                        <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue="email@example.com" />
-                                        </Col>
-                                    </Form.Group>
-                                    <Form.Group as={Row} className="mb-3" controlId="formDob">
-                                        <Form.Label column sm="2">
-                                            DOB:
-                                        </Form.Label>
-                                        <Col sm="10">
-                                        <Form.Control type="date" placeholder="Password" />
-                                        </Col>
-                                    </Form.Group>
-                                    {/* <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="formGridDob">
-                                            <Form.Label>DOB</Form.Label>
-                                            <Form.Control type="date" placeholder="Select Date of Birth" />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="formGridGender">
-                                            <Form.Label>Gender</Form.Label>
-                                            <Form.Control type="radio" name="gender" value="Male" />Male
-                                            <Form.Control type="radio" name="gender" value="female" />Female
-                                            <Form.Control type="radio" name="gender" value="other" />Others
-                                        </Form.Group>
-                                    </Row>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="formGridEmail">
-                                            <Form.Label>Email</Form.Label>
-                                            <Form.Control type="email" placeholder="Enter email" />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="formGridPassword">
-                                            <Form.Label>Password</Form.Label>
-                                            <Form.Control type="password" placeholder="Password" />
-                                        </Form.Group>
-                                    </Row>
+                            <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+                                <Form.Label column sm="2">
+                                    Password
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control type="password" placeholder="Password" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} className="mb-3" controlId="formDob">
+                                <Form.Label column sm="2">
+                                    DOB:
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control type="date" placeholder="Password" />
+                                </Col>
+                            </Form.Group>
 
-                                    <Row className="mb-3">
-                                        <Form.Group className="mb-3" controlId="formGridAddress1">
-                                            <Form.Label>Address</Form.Label>
-                                            <Form.Control placeholder="1234 Main St" />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="formGridCity">
-                                            <Form.Label>City</Form.Label>
-                                            <Form.Control />
-                                        </Form.Group>
-
-                                        <Form.Group as={Col} controlId="formGridState">
-                                            <Form.Label>State</Form.Label>
-                                            <Form.Select defaultValue="Choose...">
-                                                <option>Choose...</option>
-                                                <option>...</option>
-                                            </Form.Select>
-                                        </Form.Group>
-
-                                        <Form.Group as={Col} controlId="formGridZip">
-                                            <Form.Label>Zip</Form.Label>
-                                            <Form.Control />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Form.Group className="mb-3" id="formGridCheckbox">
-                                        <Form.Check type="checkbox" label="Check me out" />
-                                    </Form.Group> */}
-
-                                    <Button variant="primary" type="submit">
-                                        Submit
-                                    </Button>
-                                </Form>
-                            </Tab>
-                            <Tab eventKey="settings" title="Settings" disabled>
-                                Sample Text 144
-                            </Tab>
-                        </Tabs>
+                            <Button variant="primary" type="submit">
+                                Submit
+                            </Button>
+                        </Form>
                     </div>
 
 
