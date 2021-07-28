@@ -30,11 +30,19 @@ class Profile extends Component {
     getRoles(data) {
         let roleString = '';
         if (data && Array.isArray(data)) {
-            roleString = data.map(function(elem){
+            roleString = data.map(function (elem) {
                 return elem.Name;
             }).join(", ");
         }
         return roleString;
+    }
+
+    editProfile = () => {
+        this.setState(p => ({ isEdit: !p.isEdit }));
+    }
+
+    updateUserData() {
+        return true;
     }
 
     render() {
@@ -45,7 +53,17 @@ class Profile extends Component {
                         <h1>{this.state.userData?.FullName}</h1>
                     </div>
                     <div className="col-sm-2">
-                        <Button variant="primary" type="submit">Edit Profile</Button>
+                        {this.state.isEdit
+                            ?
+                            <React.Fragment>
+                                <Button variant="success" type="submit" onClick={this.updateUserData}>Update</Button>
+                                <Button variant="danger" type="button" onClick={this.editProfile}>Cancel</Button>
+                            </React.Fragment>
+                            :
+                            <React.Fragment>
+                                <Button variant="primary" type="submit" onClick={this.editProfile}>Edit Profile</Button>
+                            </React.Fragment>
+                        }
                     </div>
                 </div>
                 <div className="row">
@@ -82,96 +100,193 @@ class Profile extends Component {
 
                     <div className="col-sm-9">
                         <Form onSubmit={this.handleSubmit}>
-                            <Form.Group as={Row} className="mb-3" controlId="formFullName">
-                                <Form.Label column sm="2">
-                                    Full Name
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.FullName} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="formFullName">
-                                <Form.Label column sm="2">
-                                    Email
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Email} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="gender">
-                                <Form.Label column sm="2">
-                                    Gender
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Gender} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="fomDob">
-                                <Form.Label column sm="2">
-                                    DOB
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Dob} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="formstreetaddress1">
-                                <Form.Label column sm="2">
-                                    Street Address 1
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.StreetAddress1} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="formstreetaddress2">
-                                <Form.Label column sm="2">
-                                    Street Address 2
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.StreetAddress2} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="formCity">
-                                <Form.Label column sm="2">
-                                    City
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.City} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="formState">
-                                <Form.Label column sm="2">
-                                    State
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.State} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="formZip">
-                                <Form.Label column sm="2">
-                                    Zip
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Zip} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="mb-3" controlId="formRole">
-                                <Form.Label column sm="2">
-                                    Role
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userRoles} />
-                                </Col>
-                            </Form.Group>
+                            {!this.state.isEdit
+                                ?
+                                <React.Fragment>
+                                    <Form.Group as={Row} className="mb-3" controlId="formFullName">
+                                        <Form.Label column sm="2">
+                                            Full Name
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.FullName} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formFullName">
+                                        <Form.Label column sm="2">
+                                            Email
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Email} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="gender">
+                                        <Form.Label column sm="2">
+                                            Gender
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Gender} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="fomDob">
+                                        <Form.Label column sm="2">
+                                            DOB
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Dob} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formstreetaddress1">
+                                        <Form.Label column sm="2">
+                                            Street Address 1
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.StreetAddress1} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formstreetaddress2">
+                                        <Form.Label column sm="2">
+                                            Street Address 2
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.StreetAddress2} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formCity">
+                                        <Form.Label column sm="2">
+                                            City
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.City} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formState">
+                                        <Form.Label column sm="2">
+                                            State
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.State} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formZip">
+                                        <Form.Label column sm="2">
+                                            Zip
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Zip} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formRole">
+                                        <Form.Label column sm="2">
+                                            Role
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userRoles} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                                        <Form.Label column sm="2">
+                                            Username
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Username} />
+                                        </Col>
+                                    </Form.Group>
+                                </React.Fragment>
+                                :
+                                <React.Fragment>
+                                    <Form.Group as={Row} className="mb-3" controlId="formFullName">
+                                        <Form.Label column sm="2">
+                                            Full Name
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext defaultValue={this.state.userData?.FullName} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formFullName">
+                                        <Form.Label column sm="2">
+                                            Email
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext defaultValue={this.state.userData?.Email} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="gender">
+                                        <Form.Label column sm="2">
+                                            Gender
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Gender} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="fomDob">
+                                        <Form.Label column sm="2">
+                                            DOB
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Dob} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formstreetaddress1">
+                                        <Form.Label column sm="2">
+                                            Street Address 1
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext defaultValue={this.state.userData?.StreetAddress1} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formstreetaddress2">
+                                        <Form.Label column sm="2">
+                                            Street Address 2
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext defaultValue={this.state.userData?.StreetAddress2} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formCity">
+                                        <Form.Label column sm="2">
+                                            City
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext defaultValue={this.state.userData?.City} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formState">
+                                        <Form.Label column sm="2">
+                                            State
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext defaultValue={this.state.userData?.State} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formZip">
+                                        <Form.Label column sm="2">
+                                            Zip
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext defaultValue={this.state.userData?.Zip} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formRole">
+                                        <Form.Label column sm="2">
+                                            Role
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userRoles} />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                                        <Form.Label column sm="2">
+                                            Username
+                                        </Form.Label>
+                                        <Col sm="10">
+                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Username} />
+                                        </Col>
+                                    </Form.Group>
+                                </React.Fragment>
+                            }
+
                         </Form>
                         <Form onSubmit={this.handleSubmit}>
-                            <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                                <Form.Label column sm="2">
-                                    Username
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Username} />
-                                </Col>
-                            </Form.Group>
 
                             {/* <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
                                 <Form.Label column sm="2">
