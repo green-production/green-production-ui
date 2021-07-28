@@ -24,16 +24,15 @@ const Main = props => {
     
 
     return (
-        <div className="App">
-                {
-                    !location.pathname.includes('login') && 
-                    <AuthContextProvider><Header /></AuthContextProvider>
-                }
-                {
-                    props.data
-                    ?
-                    <Switch>
-                        <AuthContextProvider>
+        <AuthContextProvider>
+            <div className="App">
+                    {
+                        !location.pathname.includes('login') && <Header {...props}/>
+                    }
+                    {
+                        props.data
+                        ?
+                        <Switch>
                             <Route 
                                 exact={true}
                                 path="/" 
@@ -79,19 +78,19 @@ const Main = props => {
                                         />)} 
                                 />
                             </Suspense>
-                        </AuthContextProvider>
-                    </Switch>
-                    :
-                    <GlobalLoader />
-                }
-                <Route 
-                    exact 
-                    path="/not-found" 
-                    component={NotFound}/>
-                {
-                    !location.pathname.includes('login') && <Footer />
-                }
-        </div>
+                        </Switch>
+                        :
+                        <GlobalLoader />
+                    }
+                    <Route 
+                        exact 
+                        path="/not-found" 
+                        component={NotFound}/>
+                    {
+                        !location.pathname.includes('login') && <Footer />
+                    }
+            </div>
+        </AuthContextProvider>
     );
 };
 
@@ -115,6 +114,7 @@ class App extends Component {
         return (
             <div className="main">
                 <Main 
+                    {...this.props}
                     data={userData} 
                     access={Roles[userData?.Type]} />
             </div>

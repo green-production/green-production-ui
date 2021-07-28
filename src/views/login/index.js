@@ -93,6 +93,7 @@ class Login extends Component {
         const request = {
             userName: googleRes.profileObj.email,
         };
+        console.log(googleRes.profileObj)
         const headers = {
             googletoken: token,
         };
@@ -105,6 +106,7 @@ class Login extends Component {
             dispatch({ type: "LOGIN-LOGOUT" });
             jwtDispatch({ type: "JWT-TOKEN", token: res.token });
             delete res.token;
+            res.imgUrl = googleRes.profileObj.imageUrl;
             userDispatch({ type: "USER-DETAILS", res });
             this.setState({pageLoading: false})
             this.props.history.push("/");

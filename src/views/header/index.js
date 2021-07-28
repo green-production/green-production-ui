@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import { FaUserAlt } from "react-icons/fa";
+import GoogleLogout from "react-google-login";
 import Loading from "components/loader/index";
 import { AuthContext } from "../../context/authContext";
 import './index.scss'
@@ -70,8 +72,18 @@ class Header extends Component {
         }, 500);
     }
 
+    successResponseGoogle = () => {
+        const { dispatch, jwtDispatch, userDispatch } = this.context;
+
+        dispatch({ type: "LOGIN-LOGOUT" });
+        jwtDispatch({ type: "JWT-TOKEN", token: '' });
+        userDispatch({ type: "USER-DETAILS", res: null });
+
+        this.props.history.push("/login");
+    }
+
     render() {
-        const { isAuthenticated } = this.context;
+        const { isAuthenticated, userDetails } = this.context;
         return (
             <header className="ds-header app-logged-in">
                 {
@@ -145,14 +157,32 @@ class Header extends Component {
                                 <ul className="profile-wrapper">
                                     <li>
                                         <div className="profile">
-                                            <img src="http://gravatar.com/avatar/0e1e4e5e5c11835d34c0888921e78fd4?s=80" alt="user_img"/>
+                                            {userDetails.imgUrl ? <img src={userDetails.imgUrl} alt="user_img"/> : <FaUserAlt/>}
                                             <Link to="/profile" title="Profile" className="name">Toushif</Link>
                                             
                                             <ul className="menu">
                                                 <li><a href="#">Edit</a></li>
                                                 <li><a href="#">Change Password</a></li>
                                                 <li><a href="#">Settings</a></li>
-                                                <li><a href="#">Log out</a></li>
+                                                <li>
+                                                    <GoogleLogout
+                                                        clientId={
+                                                            process.env
+                                                                .REACT_APP_GOOGLE_CLIENT
+                                                        }
+                                                        buttonText="Logout with Google"
+                                                        render={renderProps => {
+                                                            return <a onClick={renderProps.onClick} href="#">Logout</a>
+                                                        }}
+                                                        style={{ transform: "scale(0.7)" }}
+                                                        onSuccess={
+                                                            this.successResponseGoogle
+                                                        }
+                                                        onFailure={
+                                                            this.failureResponseGoogle
+                                                        }
+                                                    ></GoogleLogout>
+                                                </li>
                                             </ul>
                                         </div>
                                     </li>

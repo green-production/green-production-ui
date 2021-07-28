@@ -9,7 +9,10 @@ import interceptors from "./services/http.interceptor.js";
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            <Route component={App} />
+            <Route render={props => (
+              <App {...props}/> 
+            )}
+        />
         </BrowserRouter>
     </React.StrictMode>,
     document.getElementById("root")

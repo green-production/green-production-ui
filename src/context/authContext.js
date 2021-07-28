@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 /* eslint-disable */
 const AuthContextProvider = (props) => {
-    const [isAuthenticated, dispatch] = useReducer(authReducer, false, () => {
+    let [isAuthenticated, dispatch] = useReducer(authReducer, false, () => {
         const data = JSON.parse(sessionStorage.getItem("isAuthenticated"));
         return !!data;
     });
@@ -17,17 +17,17 @@ const AuthContextProvider = (props) => {
     });
 
     useEffect(() => {
+        debugger
+        isAuthenticated = isAuthenticated;
         sessionStorage.setItem("isAuthenticated", isAuthenticated);
     }, [isAuthenticated]);
 
     useEffect(() => {
-        jwtToken ? sessionStorage.setItem("jwtToken", jwtToken) : "";
+        sessionStorage.setItem("jwtToken", jwtToken);
     }, [jwtToken]);
 
     useEffect(() => {
-        userDetails
-            ? sessionStorage.setItem("userDetails", JSON.stringify(userDetails))
-            : "";
+        sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
     }, [userDetails]);
 
     return (
