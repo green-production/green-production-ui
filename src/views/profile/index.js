@@ -11,7 +11,8 @@ class Profile extends Component {
         this.state = {
             pageLoading: true,
             userData: null,
-            isEdit: false
+            isEdit: false,
+            userRoles: ''
         };
     }
 
@@ -20,9 +21,20 @@ class Profile extends Component {
         if (!isAuthenticated) {
             this.props.history.push('/login')
         }
-        const file = await import('../../constants/json/get-user-info');
+        const file = await import('../../constants/json/get-user-profile');
         this.setState({ userData: file.default });
+        this.setState({ userRoles: this.getRoles(file.default["Roles"]) })
         console.log(this.state.userData);
+    }
+
+    getRoles(data) {
+        let roleString = '';
+        if (data && Array.isArray(data)) {
+            roleString = data.map(function(elem){
+                return elem.Name;
+            }).join(", ");
+        }
+        return roleString;
     }
 
     render() {
@@ -69,14 +81,13 @@ class Profile extends Component {
                     </div>
 
                     <div className="col-sm-9">
-                        {}
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group as={Row} className="mb-3" controlId="formFullName">
                                 <Form.Label column sm="2">
                                     Full Name
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="Soumya Das" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.FullName} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3" controlId="formFullName">
@@ -84,7 +95,7 @@ class Profile extends Component {
                                     Email
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="soumya@gmail.com" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Email} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3" controlId="gender">
@@ -92,7 +103,7 @@ class Profile extends Component {
                                     Gender
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="Male" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Gender} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3" controlId="fomDob">
@@ -100,7 +111,7 @@ class Profile extends Component {
                                     DOB
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="24 July 2021" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Dob} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3" controlId="formstreetaddress1">
@@ -108,7 +119,7 @@ class Profile extends Component {
                                     Street Address 1
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="Baranagar" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.StreetAddress1} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3" controlId="formstreetaddress2">
@@ -116,7 +127,7 @@ class Profile extends Component {
                                     Street Address 2
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="Kolkata" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.StreetAddress2} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3" controlId="formCity">
@@ -124,7 +135,7 @@ class Profile extends Component {
                                     City
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="Kolkata" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.City} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3" controlId="formState">
@@ -132,7 +143,7 @@ class Profile extends Component {
                                     State
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="WB" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.State} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3" controlId="formZip">
@@ -140,7 +151,7 @@ class Profile extends Component {
                                     Zip
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="700035" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Zip} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3" controlId="formRole">
@@ -148,7 +159,7 @@ class Profile extends Component {
                                     Role
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="Seller" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userRoles} />
                                 </Col>
                             </Form.Group>
                         </Form>
@@ -158,11 +169,11 @@ class Profile extends Component {
                                     Username
                                 </Form.Label>
                                 <Col sm="10">
-                                    <Form.Control plaintext readOnly defaultValue="soumya@gmail.com" />
+                                    <Form.Control plaintext readOnly defaultValue={this.state.userData?.Username} />
                                 </Col>
                             </Form.Group>
 
-                            <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+                            {/* <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
                                 <Form.Label column sm="2">
                                     Password
                                 </Form.Label>
@@ -181,7 +192,7 @@ class Profile extends Component {
 
                             <Button variant="primary" type="submit">
                                 Submit
-                            </Button>
+                            </Button> */}
                         </Form>
                     </div>
 
