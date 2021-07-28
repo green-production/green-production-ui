@@ -26,7 +26,8 @@ const Main = props => {
     return (
         <div className="App">
                 {
-                    !location.pathname.includes('login') && <Header />
+                    !location.pathname.includes('login') && 
+                    <AuthContextProvider><Header /></AuthContextProvider>
                 }
                 {
                     props.data

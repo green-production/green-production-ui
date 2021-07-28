@@ -49,8 +49,9 @@ div.btn-login-wrapper {
 /*Header*/
 
 header {
-	height: 430px;
+	height: 280px;
 	background: #cf0004 url(../assets/images/banner_1200.jpg) no-repeat center bottom;
+	background-size: 100% 100%;
 	position: relative;
 }
 
@@ -59,11 +60,17 @@ header a.logo {
 	position : absolute;
 	display: block; width: 200px; height: 95px;
 	background: url(../assets/images/greenytale_4.png) no-repeat 0 0; background-size: cover;
-	top: -18px; left: 0;
+	top: -40px;
+    left: -16px;
 }
 header a.logo span { display: none; }
 
-header div.hero { position: absolute; width: 42%; top: 130px; left : 55%; }
+header div.hero {
+	position: absolute; 
+	width: 44%;
+    top: 90px;
+    left: 54%;
+}
 header div.hero h1 { line-height: 1em; margin: 0 0 30px 0; color: #fff; }
 
 /*Section-All*/
@@ -142,8 +149,12 @@ nav {
 	background-color: rgba(0,0,0,.65);
 	position: absolute;
 	top: 0; left: 0;
-	padding: 50px 0 0 0;
+	padding: 10px 0 0 0;
 	width: 100%;
+}
+
+nav.large-nav-menu {
+	padding: 0;
 }
 
 nav::after { content: ' '; display: block; clear: both; }
@@ -176,7 +187,7 @@ nav ul ul ul { left: 100%; top: 0; }
 
 nav > ul { padding-left: 200px; }
 nav > ul > li { float: left; }
-nav > ul > li.login-li {
+nav > ul > li.login-li, li.profile-menu {
 	float: right;
 	margin-right: 1rem;
 }
@@ -184,7 +195,7 @@ nav > ul > li > a { width: auto; padding: 10px 20px 15px 20px; }
 
 nav a[aria-haspopup="true"]::after {
 	content: '';
-	display: block; width: 0; height: 0;
+	display: inline-block; width: 0; height: 0;
 	position: absolute;
 	top: 16px; right: 15px;
 	border-top: 4px solid transparent;
@@ -195,7 +206,10 @@ nav > ul > li > a[aria-haspopup="true"]::after {
 	border-left: 4px solid transparent;
 	border-right: 4px solid transparent;
 	border-top: 4px solid #fff;
-	left: 20px; right: auto; bottom: 6px; top: auto;
+	// left: 20px; right: auto; bottom: 6px; top: auto;
+	right: 6px;
+    bottom: 19px;
+    top: auto;
 }
 
 /* Footer */

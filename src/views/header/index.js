@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import Loading from "components/loader/index";
-
+import { AuthContext } from "../../context/authContext";
+import './index.scss'
 
 /**
  * Component that alerts if you click outside of it
@@ -55,6 +56,7 @@ import Loading from "components/loader/index";
 // }
 
 class Header extends Component {
+    static contextType = AuthContext;
     constructor(props) {
         super(props);
         this.state = {
@@ -69,7 +71,7 @@ class Header extends Component {
     }
 
     render() {
-
+        const { isAuthenticated } = this.context;
         return (
             <header className="ds-header app-logged-in">
                 {
@@ -79,7 +81,7 @@ class Header extends Component {
                         ""
                 }   
                 <nav className="navbar large-nav-menu">
-                    <a className="logo" title="Everyday things" href="https://google.com"><span>Everyday Things</span></a>
+                    <Link className="logo" title="Greenytale logo" to="/"><span>Greenytale logo</span></Link>
                     {/* <div className="btn-login-wrapper">
                         <button className="btn sub-header login-btn" title="Login">Login</button>
                     </div> */}
@@ -137,9 +139,30 @@ class Header extends Component {
                         <li>
                             <Link title="Contact Us" to="#">Contact Us</Link>
                         </li>
-                        <li className="login-li">
-                            <Link title="Login" to="/login">Login</Link>
-                        </li>
+                        {
+                            isAuthenticated ?
+                            <li className="profile-menu">
+                                <ul className="profile-wrapper">
+                                    <li>
+                                        <div className="profile">
+                                            <img src="http://gravatar.com/avatar/0e1e4e5e5c11835d34c0888921e78fd4?s=80" alt="user_img"/>
+                                            <Link to="/profile" title="Profile" className="name">Toushif</Link>
+                                            
+                                            <ul className="menu">
+                                                <li><a href="#">Edit</a></li>
+                                                <li><a href="#">Change Password</a></li>
+                                                <li><a href="#">Settings</a></li>
+                                                <li><a href="#">Log out</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            :
+                            <li className="login-li">
+                                <Link title="Login" to="/login">Login</Link>
+                            </li>
+                        }
                     </ul>
                 </nav>
             </header>

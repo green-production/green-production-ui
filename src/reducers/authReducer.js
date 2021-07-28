@@ -1,10 +1,14 @@
 const authReducer = (state, action) => {
-    switch(action.type) {
-        case 'LOGIN-LOGOUT':
-            return !state
+    switch (action.type) {
+        case "LOGIN-LOGOUT":
+            return !state;
+        case "JWT-TOKEN":
+            return action.token;
+        case "USER-DETAILS":
+            return action.res;
         default:
-            return state
+            return state;
     }
-}
+};
 
-export default authReducer
+export default authReducer;
