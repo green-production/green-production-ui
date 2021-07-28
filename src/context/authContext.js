@@ -3,7 +3,6 @@ import authReducer from "reducers/authReducer";
 
 export const AuthContext = createContext();
 
-/* eslint-disable */
 const AuthContextProvider = (props) => {
     let [isAuthenticated, dispatch] = useReducer(authReducer, false, () => {
         const data = JSON.parse(sessionStorage.getItem("isAuthenticated"));
@@ -17,8 +16,6 @@ const AuthContextProvider = (props) => {
     });
 
     useEffect(() => {
-        debugger
-        isAuthenticated = isAuthenticated;
         sessionStorage.setItem("isAuthenticated", isAuthenticated);
     }, [isAuthenticated]);
 

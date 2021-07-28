@@ -157,8 +157,8 @@ class Header extends Component {
                                 <ul className="profile-wrapper">
                                     <li>
                                         <div className="profile">
-                                            {userDetails.imgUrl ? <img src={userDetails.imgUrl} alt="user_img"/> : <FaUserAlt/>}
-                                            <Link to="/profile" title="Profile" className="name">Toushif</Link>
+                                            {userDetails?.imgUrl ? <img src={userDetails?.imgUrl} alt="user_img"/> : <FaUserAlt/>}
+                                            <Link to="/profile" title="Profile" className="name">{userDetails?.user_name?.toUpperCase()}</Link>
                                             
                                             <ul className="menu">
                                                 <li><a href="#">Edit</a></li>
