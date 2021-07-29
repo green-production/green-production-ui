@@ -3,13 +3,14 @@ import RelativeAPI, {
     Mock_Environment,
     Json_Server_URL,
     Base_URL,
+    Watson_URL
 } from "../constants/api.relative.js";
 
 class HttpService {
     get(apiName, additionalHeaders) {
         const url = this.getUrl(apiName);
 
-        return this.getApiData(url, additionalHeaders);
+        return this.getApiData(url, additionalHeaders, apiName);
     }
 
     post(apiName, formData, additionalHeaders) {
@@ -36,16 +37,31 @@ class HttpService {
         const url = this.getUrl(apiName);
 
         if (Mock_Environment) {
-            return this.getApiData(url, null);
+            return this.getApiData(url, null, apiName);
         } else {
             return this.deleteApiData(url, formData);
         }
     }
 
-    async getApiData(url, headerValues) {
+    async getApiData(url, headerValues, apiName) {
         const headers = this.getHttpHeaders(headerValues);
 
-        return await axios.get(url, { headers: headers });
+        let options;
+        if (apiName.includes("enriched_text.entities.text:")) {
+            options = {
+                headers,
+                auth: {
+                    username: 'apikey',
+                    password: process.env.REACT_APP_WATSON_PASSWORD
+                }
+            };
+        } else {
+            options = {
+                headers
+            }
+        }
+
+        return await axios.get(url, options);
     }
 
     async postApiData(url, params, headerValues, apiName) {
@@ -53,7 +69,6 @@ class HttpService {
         const headers = this.getHttpHeaders(headerValues);
 
         let options;
-
         if (apiName === "imageRelated") {
             options = {
                 headers,
@@ -134,9 +149,9 @@ class HttpService {
 
     getUrl(apiName) {
         const api = RelativeAPI.find((item) => {
-            return item.ApiName === apiName;
+            return apiName.includes(item.ApiName);
         });
-        const url = this.getApiUrl(api);
+        const url = this.getApiUrl(api, apiName);
 
         return url;
     }
@@ -151,13 +166,16 @@ class HttpService {
         return a;
     }
 
-    getApiUrl(api) {
+    getApiUrl(api, apiName) {
         let url;
-
         if (Mock_Environment) {
             url = Json_Server_URL.concat(api.MockUrl);
         } else {
-            url = Base_URL.concat(api.RelativeUrl);
+            if(api.ApiName.includes('enriched_text.entities.text:')) {
+                url = Watson_URL.concat(apiName);
+            } else {
+                url = Base_URL.concat(api.RelativeUrl);
+            }
         }
 
         return url;

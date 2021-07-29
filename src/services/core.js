@@ -9,6 +9,10 @@ const Core = {
     signupService(api, data) {
         return httpService.post(appSettings.signup, data);
     },
+
+    searchWatson(api) {
+        return httpService.get(appSettings.watsonSeach + api);
+    },
 };
 
 export default Core;

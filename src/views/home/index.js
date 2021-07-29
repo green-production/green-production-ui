@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import photoSeating from 'assets/images/photo_seating.jpg'
 import photoLight from 'assets/images/photo_lighting.jpg'
+import Core from "../../services/core";
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             pageLoading: true,
+            search: ''
         };
     }
 
@@ -16,9 +18,24 @@ class Dashboard extends Component {
 
     componentDidMount() {}
 
+    searchChange = async e => {
+        const query = e.target.value
+        this.setState({search: query})
+    }
+
+    hitSearch = async e => {
+        const res = await Core.searchWatson(this.state.search)
+        console.log('search', res.data)
+    }
+
     render() {
         return (
             <div className="dashboard">
+                <section>
+                    <label>Search web</label>
+                    <input style={{width: '250px'}} type="text" value={this.state.search} placeholder="Search anything" onChange={this.searchChange}></input>
+                    <input type="button" value="Search" onClick={this.hitSearch}/>
+                </section>
                 <section className="main">
                     <aside>
                         <div className="content trending">

@@ -6,6 +6,7 @@ const interceptors = () => {
             if (
                 !(
                     request.url.includes("login") ||
+                    request.url.includes("enriched_text.entities.text:") ||
                     request.url.includes("sign-up")
                 )
             ) {

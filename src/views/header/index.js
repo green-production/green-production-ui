@@ -162,8 +162,8 @@ class Header extends Component {
                                             
                                             <ul className="menu">
                                                 <li><a href="#">Edit</a></li>
-                                                <li><a href="#">Change Password</a></li>
                                                 <li><a href="#">Settings</a></li>
+                                                <li><a href="#">Change Password</a></li>
                                                 <li>
                                                     <GoogleLogout
                                                         clientId={
