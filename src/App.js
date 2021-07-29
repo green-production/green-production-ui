@@ -69,6 +69,16 @@ const Main = props => {
                                 />
                                 <Route 
                                     exact 
+                                    path="/product" 
+                                    render={() => (
+                                        <PrivateRoute 
+                                            user={props.data}
+                                            allowed={1}
+                                            component={Product}
+                                        />)} 
+                                />
+                                <Route 
+                                    exact 
                                     path="/product/:id" 
                                     render={() => (
                                         <PrivateRoute 
