@@ -8,11 +8,11 @@ import Loading from "components/loader/index";
 import { AuthContext } from "../../context/authContext";
 import banner from "assets/images/banner_1200.jpg";
 import climate1 from "assets/images/climate1.jpg";
-import climate2 from "assets/images/climate2.jpeg";
-import climate3 from "assets/images/climate3.jpeg";
+import climate2 from "assets/images/climate2.jpg";
+import climate3 from "assets/images/climate3.jpg";
 import climate4 from "assets/images/climate4.jpg";
 import climate5 from "assets/images/climate5.jpg";
-import climate6 from "assets/images/climate6.jpeg";
+import climate6 from "assets/images/climate6.jpg";
 import "./index.scss";
 
 /**
