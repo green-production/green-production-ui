@@ -226,16 +226,6 @@ class HttpService {
         document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     }
 
-    handleErrorMsg(error) {
-        let err = error.message || error.error || error,
-            consoleErr = console.error;
-
-        if (!err) {
-            err = "Some error occurred. Please try again.";
-        }
-
-        consoleErr(err);
-    }
 }
 
 export default new HttpService();

@@ -50,9 +50,24 @@ div.btn-login-wrapper {
 
 header {
 	height: 280px;
-	background: #cf0004 url(../assets/images/banner_1200.jpg) no-repeat center bottom;
+	background: #cf0004 url(../assets/images/green-banner.jpg) no-repeat center bottom;
 	background-size: 100% 100%;
 	position: relative;
+
+	.carousel.carousel-slider {
+		height: 310px;
+
+	}
+	.carousel {
+		// display: none;
+
+		.thumbs-wrapper {
+			display: none;
+		}
+		.slide img {
+			height: 280px;
+		}
+	}
 }
 
 header a.logo {
@@ -155,6 +170,9 @@ nav {
 
 nav.large-nav-menu {
 	padding: 0;
+	position: absolute;
+    top: 0;
+    z-index: 10;
 }
 
 nav::after { content: ' '; display: block; clear: both; }

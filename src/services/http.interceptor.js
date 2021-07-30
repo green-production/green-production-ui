@@ -8,11 +8,12 @@ const interceptors = () => {
                     request.url.includes("login") ||
                     request.url.includes("enriched_text.entities.text:") ||
                     request.url.includes("sign-up")
-                )
+                ) &&
+                sessionStorage.getItem("token")
             ) {
                 request.headers[
                     "greenytaletoken"
-                ] = `Bearer sckskskcs8dg8sbfysbjhsc jh`;
+                ] = `Bearer ${sessionStorage.getItem("jwtToken")}`;
             }
             return request;
         },

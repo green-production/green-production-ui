@@ -2,7 +2,8 @@
 import React, { Suspense, lazy, Component } from "react";
 import {
     Switch,
-    Route
+    Route,
+    Redirect
 } from "react-router-dom";
 import Dashboard from "views/home/index";
 import NotFound from "views/not-found/index";
@@ -18,6 +19,8 @@ import "styles/common.scss";
 const Login = lazy(() => import("views/login/index"));
 const Profile = lazy(() => import("views/profile/index"));
 const Product = lazy(() => import("views/product/index"));
+const WatsonDiscovery = lazy(() => import("views/watson-discovery/index"));
+const AboutUs = lazy(() => import("views/about/index"));
 
 
 const Main = props => {
@@ -87,15 +90,44 @@ const Main = props => {
                                             component={Product}
                                         />)} 
                                 />
+                                <Route 
+                                    exact 
+                                    path="/discover" 
+                                    render={() => (
+                                        <PrivateRoute 
+                                            user={props.data}
+                                            allowed={1}
+                                            component={WatsonDiscovery}
+                                        />)} 
+                                />
+                                <Route 
+                                    exact 
+                                    path="/about-us" 
+                                    render={() => (
+                                        <PrivateRoute 
+                                            user={props.data}
+                                            allowed={1}
+                                            component={AboutUs}
+                                        />)} 
+                                />
                             </Suspense>
+                            <Route 
+                                exact 
+                                path="/not-found" 
+                                component={NotFound}/>
+                            <Route 
+                                path="*"
+                                render={() =>(
+                                    <Redirect
+                                        to="/not-found"
+                                    />
+                                    )
+                                }>
+                            </Route>
                         </Switch>
                         :
                         <GlobalLoader />
                     }
-                    <Route 
-                        exact 
-                        path="/not-found" 
-                        component={NotFound}/>
                     {
                         !location.pathname.includes('login') && <Footer />
                     }

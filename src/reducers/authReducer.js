@@ -6,6 +6,8 @@ const authReducer = (state, action) => {
             return action.token;
         case "USER-DETAILS":
             return action.res;
+        case "WATSON-DISCOVERY":
+            return action.res
         default:
             return state;
     }

@@ -9,7 +9,7 @@ const RelativeAPI = [
         ApiName: "signup",
         Type: "greenytale",
         MockUrl: "/signup.json",
-        RelativeUrl: "/users/signup",
+        RelativeUrl: "/users/sign-up",
     },
     {
         ApiName: "login",

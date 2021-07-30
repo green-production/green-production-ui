@@ -41,6 +41,17 @@
     background-repeat: no-repeat;
     background-position: top center;
     background-size: cover;
+
+    .error-message {
+        display: block;
+        z-index: 100000;
+        color: #530303;
+        position: absolute;
+        top: 7%;
+        background: #faecec;
+        padding: 5px;
+        border-radius: 8px;
+    }
   }
   .signup__thumbnail {
     position: relative;

@@ -3,6 +3,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import GoogleLogin from "react-google-login";
 import { AuthContext } from "../../context/authContext";
 import Core from "../../services/core";
+import handleError from "../../services/errorHandler";
 import Loading from "components/loader/index";
 import { InputForm, Dropdown } from "../../components/form-inputs/index";
 import "./index.scss";
@@ -15,24 +16,22 @@ class Login extends Component {
         super(props);
         this.state = {
             pageLoading: false,
-            securityQuestion1: "Select",
-            securityQuestion2: "Select",
-            gender: "Select",
+            errorMsg: "Invalid username or password",
             isLogin: true,
+            isError: false,
             captchaToken: null,
             formData: {
                 dob: "",
                 email: "",
-                gender: "",
-                name: "",
+                gender: "Select",
+                full_name: "",
                 password: "",
                 passwordRepeat: "",
                 securityAnswer1: "",
                 securityAnswer2: "",
-                securityQuestion1: "",
-                securityQuestion2: "",
-                username: "",
-                captcha: "",
+                securityQuestion1: "Select",
+                securityQuestion2: "Select",
+                user_name: "",
             },
         };
     }
@@ -44,20 +43,60 @@ class Login extends Component {
         }
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
+    handleSubmit = async (e) => {
+        e.preventDefault(); 
+        this.setState({isError: false})
         const data = new FormData(e.target);
 
         const value = Object.fromEntries(data.entries());
         this.setState({ formData: value });
-        const { dispatch } = this.context;
-        dispatch({ type: "LOGIN-LOGOUT" });
-        this.props.history.push("/");
+        delete value["g-recaptcha-response"];
+        delete value["securityAnswer1"];
+        delete value["securityAnswer2"];
+        delete value["securityQuestion1"];
+        delete value["securityQuestion2"];
+        const {
+            securityAnswer1,
+            securityAnswer2,
+            securityQuestion1,
+            securityQuestion2,
+        } = this.state.formData;
+        const request = this.state.isLogin
+            ? {
+                  ...value,
+              }
+            : {
+                  ...value,
+                  secure_login_recovery: [
+                      {
+                          security_question_ID: securityQuestion1,
+                          secure_answer: securityAnswer1,
+                      },
+                      {
+                          security_question_ID: securityQuestion2,
+                          secure_answer: securityAnswer2,
+                      },
+                  ],
+              };
+        console.log("formData", this.state.formData, value);
+        this.setState({ pageLoading: true });
+        try {
+            const res = await Core[this.state.isLogin ? 'loginService' : 'signupService'](request);
+            if (res) {
+                this.loginSuccess(res);
+            }
+        } catch (error) {
+            this.setState({isError: true})
+            handleError(error);
+        }
+        this.setState({ pageLoading: false });
     };
 
     handleInputChange = (e) => {
+        const obj = { ...this.state.formData };
+        obj[e.target.id] = e.target.value;
         this.setState({
-            [e.target.id]: e.target.value,
+            formData: obj,
         });
     };
 
@@ -65,6 +104,7 @@ class Login extends Component {
         this.setState((prevState) => ({ isLogin: !prevState.isLogin }));
         recaptchaRef.current.reset();
         this.setState({ captchaToken: null });
+        this.setState({isError: false})
         this.resetForm();
     };
 
@@ -83,34 +123,43 @@ class Login extends Component {
     captchaChange = (e) => {
         const captchaToken = recaptchaRef.current.getValue();
         this.setState({ captchaToken });
-        console.log("token", captchaToken);
+        this.setState({isError: false})
+        // console.log("token", captchaToken);
     };
 
     successResponseGoogle = async (googleRes) => {
-        const { dispatch, jwtDispatch, userDispatch } = this.context;
+        this.setState({isError: false})
         const token = googleRes.getAuthResponse().id_token;
 
         const request = {
-            userName: googleRes.profileObj.email,
+            user_name: googleRes.profileObj.email,
         };
-        console.log(googleRes.profileObj)
         const headers = {
             googletoken: token,
         };
 
-        this.setState({pageLoading: true})
-        const res = await Core.loginService(request, headers);
-        console.log("res", res);
-
-        if (res) {
-            dispatch({ type: "LOGIN-LOGOUT" });
-            jwtDispatch({ type: "JWT-TOKEN", token: res.token });
-            delete res.token;
-            res.imgUrl = googleRes.profileObj.imageUrl;
-            userDispatch({ type: "USER-DETAILS", res });
-            this.setState({pageLoading: false})
-            this.props.history.push("/");
+        this.setState({ pageLoading: true });
+        try {
+            const res = await Core.loginService(request, headers);
+            if (res) {
+                this.loginSuccess(res, googleRes);
+            }
+        } catch (error) {
+            this.setState({isError: true})
+            handleError(error);
         }
+        this.setState({ pageLoading: false });
+    };
+
+    loginSuccess = (res, googleRes = "") => {
+        const { dispatch, jwtDispatch, userDispatch } = this.context;
+
+        dispatch({ type: "LOGIN-LOGOUT" });
+        jwtDispatch({ type: "JWT-TOKEN", token: res.token });
+        delete res.token;
+        res.imgUrl = googleRes?.profileObj?.imageUrl;
+        userDispatch({ type: "USER-DETAILS", res });
+        this.props.history.push("/");
     };
 
     failureResponseGoogle = (err) => {
@@ -118,15 +167,11 @@ class Login extends Component {
     };
 
     render() {
+        const {isLogin, isError, errorMsg, pageLoading} = this.state
         return (
             <div>
-                {
-                    (this.state.pageLoading) ?
-                        <Loading/>
-                        :
-                        ""
-                }
-                <div className="signup__container">
+                {pageLoading ? <Loading /> : ""}
+                <div className="signup__container" style={{height: isLogin ? '30rem' : '33rem'}}>
                     <div className="container__child signup__thumbnail">
                         <div className="thumbnail__content text-center">
                             <h3 className="heading--secondary">
@@ -137,14 +182,22 @@ class Login extends Component {
                         <div className="signup__overlay"></div>
                     </div>
                     <div className="container__child signup__form">
+                        {
+                            isError && 
+                            <div className="error-message" style={{top: isLogin ? '7%' : '0'}}>
+                                {errorMsg}
+                            </div>
+                        }
                         <div className="formWrapper">
                             <form onSubmit={this.handleSubmit}>
                                 {this.state.isLogin ? (
                                     <React.Fragment>
                                         <InputFormFn
-                                            id="usernameEmail"
+                                            id="user_name"
                                             type="text"
-                                            value={this.state.usernameEmail}
+                                            value={
+                                                this.state.formData.user_name
+                                            }
                                             placeholder="Enter your username/ email"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
@@ -152,7 +205,7 @@ class Login extends Component {
                                         <InputFormFn
                                             id="password"
                                             type="password"
-                                            value={this.state.password}
+                                            value={this.state.formData.password}
                                             placeholder="Enter password"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
@@ -161,17 +214,21 @@ class Login extends Component {
                                 ) : (
                                     <React.Fragment>
                                         <InputFormFn
-                                            id="name"
+                                            id="full_name"
                                             type="text"
-                                            value={this.state.name}
+                                            value={
+                                                this.state.formData.full_name
+                                            }
                                             placeholder="Enter your name"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
                                         <InputFormFn
-                                            id="username"
+                                            id="user_name"
                                             type="text"
-                                            value={this.state.username}
+                                            value={
+                                                this.state.formData.user_name
+                                            }
                                             placeholder="Enter your username"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
@@ -179,7 +236,7 @@ class Login extends Component {
                                         <InputFormFn
                                             id="email"
                                             type="text"
-                                            value={this.state.email}
+                                            value={this.state.formData.email}
                                             placeholder="Enter your email"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
@@ -187,7 +244,7 @@ class Login extends Component {
                                         <InputFormFn
                                             id="password"
                                             type="password"
-                                            value={this.state.password}
+                                            value={this.state.formData.password}
                                             placeholder="Enter password"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
@@ -195,7 +252,10 @@ class Login extends Component {
                                         <InputFormFn
                                             id="passwordRepeat"
                                             type="password"
-                                            value={this.state.passwordRepeat}
+                                            value={
+                                                this.state.formData
+                                                    .passwordRepeat
+                                            }
                                             placeholder="Confirm password"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
@@ -203,27 +263,33 @@ class Login extends Component {
                                         <InputFormFn
                                             id="dob"
                                             type="text"
-                                            value={this.state.dob}
-                                            placeholder="Date of Birth: YYYY-MM-DD"
+                                            value={this.state.formData.dob}
+                                            placeholder="Date of Birth: DD/MM/YYYY"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
                                         />
                                         <DropdownFn
                                             id="gender"
                                             label="Gender"
-                                            value={this.state.gender}
+                                            value={this.state.formData.gender}
                                             changeFn={this.handleInputChange}
                                         />
                                         <DropdownFn
                                             id="securityQuestion1"
                                             label="Security question 1"
-                                            value={this.state.securityQuestion1}
+                                            value={
+                                                this.state.formData
+                                                    .securityQuestion1
+                                            }
                                             changeFn={this.handleInputChange}
                                         />
                                         <InputFormFn
                                             id="securityAnswer1"
                                             type="text"
-                                            value={this.state.securityAnswer1}
+                                            value={
+                                                this.state.formData
+                                                    .securityAnswer1
+                                            }
                                             placeholder="Answer for question 1"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
@@ -231,13 +297,19 @@ class Login extends Component {
                                         <DropdownFn
                                             id="securityQuestion2"
                                             label="Security question 2"
-                                            value={this.state.securityQuestion2}
+                                            value={
+                                                this.state.formData
+                                                    .securityQuestion2
+                                            }
                                             changeFn={this.handleInputChange}
                                         />
                                         <InputFormFn
                                             id="securityAnswer2"
                                             type="text"
-                                            value={this.state.securityAnswer2}
+                                            value={
+                                                this.state.formData
+                                                    .securityAnswer2
+                                            }
                                             placeholder="Answer for question 2"
                                             changeFn={this.handleInputChange}
                                             isRequired={true}
@@ -260,13 +332,13 @@ class Login extends Component {
                                         type="submit"
                                         disabled={!this.state.captchaToken}
                                         value={
-                                            this.state.isLogin
+                                            isLogin
                                                 ? "Login"
                                                 : "Register"
                                         }
                                     />
                                 </div>
-                                {this.state.isLogin && (
+                                {isLogin && (
                                     <div className="google-login">
                                         <GoogleLogin
                                             clientId={
@@ -290,7 +362,7 @@ class Login extends Component {
                             className="signup__link"
                             onClick={this.loginForm}
                         >
-                            {this.state.isLogin ? "Register" : "Login"}
+                            {isLogin ? "Register" : "Login"}
                         </button>
                     </div>
                 </div>

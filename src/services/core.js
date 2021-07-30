@@ -6,7 +6,7 @@ const Core = {
         return httpService.post(appSettings.login, data, headers);
     },
 
-    signupService(api, data) {
+    signupService(data) {
         return httpService.post(appSettings.signup, data);
     },
 

@@ -4,7 +4,7 @@ import authReducer from "reducers/authReducer";
 export const AuthContext = createContext();
 
 const AuthContextProvider = (props) => {
-    let [isAuthenticated, dispatch] = useReducer(authReducer, false, () => {
+    const [isAuthenticated, dispatch] = useReducer(authReducer, false, () => {
         const data = JSON.parse(sessionStorage.getItem("isAuthenticated"));
         return !!data;
     });
@@ -14,6 +14,7 @@ const AuthContextProvider = (props) => {
     const [userDetails, userDispatch] = useReducer(authReducer, null, () => {
         return JSON.parse(sessionStorage.getItem("userDetails"));
     });
+    const [isWatsonDiscovery, dispatchWatsonDiscovery] = useReducer(authReducer, false);
 
     useEffect(() => {
         sessionStorage.setItem("isAuthenticated", isAuthenticated);
@@ -33,9 +34,11 @@ const AuthContextProvider = (props) => {
                 isAuthenticated,
                 jwtToken,
                 userDetails,
+                isWatsonDiscovery,
                 dispatch,
                 jwtDispatch,
                 userDispatch,
+                dispatchWatsonDiscovery
             }}
         >
             {props.children}
