@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { FaUserAlt } from "react-icons/fa";
+import { FaUserAlt, FaSearch } from "react-icons/fa";
 import GoogleLogout from "react-google-login";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
@@ -259,6 +259,33 @@ class Header extends Component {
                                 Contact Us
                             </Link>
                         </li>
+                        <li>
+                            <div className="header-search">
+                                <div className="input-field first-wrap">
+                                    <div className="input-select">
+                                    <select data-trigger="" name="choices-single-defaul">
+                                        <option placeholder="">Category</option>
+                                        <option>New Arrivals</option>
+                                        <option>Sale</option>
+                                        <option>Ladies</option>
+                                        <option>Men</option>
+                                        <option>Clothing</option>
+                                        <option>Footwear</option>
+                                        <option>Accessories</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                <div className="input-field second-wrap">
+                                    <input id="search" type="text" placeholder="Enter Keywords?" />
+                                </div>
+                                <div className="input-field third-wrap">
+                                    <button className="btn-search" type="button">
+                                        <FaSearch/>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                        
                         {isAuthenticated ? (
                             <li className="profile-menu">
                                 <ul className="profile-wrapper">
