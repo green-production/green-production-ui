@@ -9,10 +9,10 @@ const interceptors = () => {
                     request.url.includes("enriched_text.entities.text:") ||
                     request.url.includes("sign-up")
                 ) &&
-                sessionStorage.getItem("token")
+                sessionStorage.getItem("jwtToken")
             ) {
                 request.headers[
-                    "greenytaletoken"
+                    "Authorization"
                 ] = `Bearer ${sessionStorage.getItem("jwtToken")}`;
             }
             return request;

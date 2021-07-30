@@ -13,6 +13,14 @@ const Core = {
     searchWatson(api) {
         return httpService.get(appSettings.watsonSeach + api);
     },
+
+    updateUser(data) {
+        return httpService.post(appSettings.updateUser, data);
+    },
+
+    deleteUser(data) {
+        return httpService.post(appSettings.deleteUser, data);
+    },
 };
 
 export default Core;

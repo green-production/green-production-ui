@@ -4,7 +4,6 @@ import Loading from "components/loader/index";
 import { AuthContext } from "../../context/authContext";
 import handleError from "../../services/errorHandler";
 import "./index.scss";
-import { Link } from "react-router-dom";
 
 class WatsonDiscovery extends Component {
     static contextType = AuthContext;

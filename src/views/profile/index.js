@@ -25,6 +25,10 @@ class Profile extends Component {
         this.setState({ userData: file.default });
         this.setState({ userRoles: this.getRoles(file.default["Roles"]) })
         console.log(this.state.userData);
+
+        if(this.props.history?.location?.param === 'edit') {
+            this.setState({ isEdit: true });
+        }
     }
 
     getRoles(data) {

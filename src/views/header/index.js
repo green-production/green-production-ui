@@ -79,6 +79,7 @@ class Header extends Component {
         setTimeout(() => {
             this.setState({ pageLoading: false });
         }, 500);
+        console.log("this.props.history", this.props.history)
     }
 
     successResponseGoogle = () => {
@@ -98,6 +99,14 @@ class Header extends Component {
     render() {
         const { isAuthenticated, isWatsonDiscovery, userDetails } =
             this.context;
+        const profilePath = { 
+            pathname: "/profile", 
+            param: "edit" 
+        };
+        const changePassword = { 
+            pathname: "/settings", 
+            param: "security" 
+        };
         return (
             <header
                 style={{ height: isWatsonDiscovery ? "80px" : "280px" }}
@@ -152,7 +161,6 @@ class Header extends Component {
                             <Link
                                 to="/about-us"
                                 title="About Us"
-                                href="javascript:void(0)"
                                 onClick={this.onClick}
                             >
                                 About us
@@ -255,36 +263,41 @@ class Header extends Component {
                             </ul>
                         </li>
                         <li>
-                            <Link title="Contact Us" to="#">
+                            <Link title="Contact Us" to="/about-us#contact">
                                 Contact Us
                             </Link>
                         </li>
-                        <li>
-                            <div className="header-search">
-                                <div className="input-field first-wrap">
-                                    <div className="input-select">
-                                    <select data-trigger="" name="choices-single-defaul">
-                                        <option placeholder="">Category</option>
-                                        <option>New Arrivals</option>
-                                        <option>Sale</option>
-                                        <option>Ladies</option>
-                                        <option>Men</option>
-                                        <option>Clothing</option>
-                                        <option>Footwear</option>
-                                        <option>Accessories</option>
-                                    </select>
+                        {
+                            this.props.history?.location?.pathname === '/' &&
+                            <li className="product-search">
+                                <div className="header-search">
+                                    <div className="input-field first-wrap">
+                                        <div className="input-select">
+                                        <select data-trigger="" name="choices-single-defaul" className="choices-single-defaul">
+                                            <option placeholder="">Category</option>
+                                            <option>New Arrivals</option>
+                                            <option>Eco friendly only</option>
+                                            <option>Her/She</option>
+                                            <option>Him/He</option>
+                                            <option>Clothing</option>
+                                            <option>Footwear</option>
+                                            <option>Electronics</option>
+                                            <option>Domestic appliances</option>
+                                            <option>Accessories</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div className="input-field second-wrap">
+                                        <input id="search" type="text" placeholder="Search products" />
+                                    </div>
+                                    <div className="input-field third-wrap">
+                                        <button className="btn-search" type="button">
+                                            <FaSearch/>
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="input-field second-wrap">
-                                    <input id="search" type="text" placeholder="Enter Keywords?" />
-                                </div>
-                                <div className="input-field third-wrap">
-                                    <button className="btn-search" type="button">
-                                        <FaSearch/>
-                                    </button>
-                                </div>
-                            </div>
-                        </li>
+                            </li>
+                        }
                         
                         {isAuthenticated ? (
                             <li className="profile-menu">
@@ -309,15 +322,13 @@ class Header extends Component {
 
                                             <ul className="menu">
                                                 <li>
-                                                    <a href="#">Edit</a>
+                                                    <Link to={profilePath}>Edit</Link>
                                                 </li>
                                                 <li>
-                                                    <a href="#">Settings</a>
+                                                <Link to="/settings">Settings</Link>
                                                 </li>
                                                 <li>
-                                                    <a href="#">
-                                                        Change Password
-                                                    </a>
+                                                <Link to={changePassword}>Change Password</Link>
                                                 </li>
                                                 <li>
                                                     <GoogleLogout

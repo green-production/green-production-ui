@@ -14,11 +14,16 @@ class AboutUs extends Component {
             email: '',
             message: ''
         };
+        this.contact = React.createRef();
     }
 
     componentDidMount() {
         const { dispatchWatsonDiscovery } = this.context;
         dispatchWatsonDiscovery({ type: "WATSON-DISCOVERY", res: true });
+        
+        if(this.props.history?.location?.hash === '#contact') {
+            window.scrollTo(0, this.contact.current.offsetTop)   
+        }
     }
 
     componentWillUnmount() {
@@ -32,7 +37,6 @@ class AboutUs extends Component {
     }
 
     onChangeContact = e => {
-        console.log(e, e.target.id, e.target.value)
         this.setState({
             [e.target.id]: e.target.value
         });
@@ -40,15 +44,14 @@ class AboutUs extends Component {
 
     render() {
         return (
-            <div classNameName="about-us">
-
+            <div className="about-us">
                 <div
                     className="w3-content"
                     style={{maxWidth:'2000px'}}
                 >
                     <div className="mySlides w3-display-container w3-center">
                         <div className="home-video home-banner">
-                            <video controls="" preload="none" poster="themes/custom/porto/assets/cover.jpg" muted="true" autoplay="" loop="">
+                            <video controls="" preload="none" poster="themes/custom/porto/assets/cover.jpg" muted={true} autoPlay loop>
                                 <source src={aboutVideo} type="video/mp4"/>
                             </video>
                             <div className="overlay">
@@ -137,14 +140,13 @@ class AboutUs extends Component {
                                             <b>Decision Making</b>
                                         </p>
                                         <p className="w3-opacity">
-                                            Fri 27 Nov 2016
+                                            Ethical impact
                                         </p>
                                         <p>
                                             A consumer can make a more informed decision on choosing their raw materials/product parts/products based on a score we’ll provide through an algorithm leveraging Watson AI on parameters like recyclability, reusability, cost, manufacturing impact on environment, carbon footprint, end to end lifetime of a product, disposability, etc.  
                                         </p>
                                         <button
                                             className="w3-button w3-black w3-margin-bottom"
-                                            onclick="document.getElementById('ticketModal')"
                                             style={{display:'block'}}
                                         >
                                             Learn more
@@ -157,14 +159,13 @@ class AboutUs extends Component {
                                             <b>Consumption-Production eco-friendly balance</b>
                                         </p>
                                         <p className="w3-opacity">
-                                            Sat 28 Nov 2016
+                                            Economical impact
                                         </p>
                                         <p>
                                             We will provide an interface and channel for our seller who will be selling materials/products based on a number of parameters meeting our environment friendly guidelines of recycling, reusability, minimum carbon footprint, etc. Every seller will host/sell only environment friendly materials/products by sharing information and filling out one-time minimum form pertaining to the production process of the product which will be later approved by our team to be hosted in the platform if it meets all the sustainable consumption and production patterns. 
                                         </p>
                                         <button
                                             className="w3-button w3-black w3-margin-bottom"
-                                            onclick="document.getElementById('ticketModal')"
                                             style={{display:'block'}}
                                         >
                                             Learn more
@@ -177,14 +178,13 @@ class AboutUs extends Component {
                                             <b>Lowering carbon footprint</b>
                                         </p>
                                         <p className="w3-opacity">
-                                            Sun 29 Nov 2016
+                                            Ecological impact
                                         </p>
                                         <p>
                                             Consumer can compare the information available for a material/product from different sources to make the best possible decision based on price, quality, carbon footprint, etc. Beside comparison, we will also be leveraging Watson AI with other data sources and list out analytical useful data on every product like manufacturing cost, raw materials used, the impact of the product on the environment, how to reduce the impact, alternative solutions, how to reuse, how to connect to other organizations, companies for recycling, product lifecycle, etc 
                                         </p>
                                         <button
                                             className="w3-button w3-black w3-margin-bottom"
-                                            onclick="document.getElementById('ticketModal')"
                                             style={{display:'block'}}
                                         >
                                             Learn more
@@ -199,7 +199,6 @@ class AboutUs extends Component {
                         <div className="w3-modal-content w3-animate-top w3-card-4">
                             <header className="w3-container w3-teal w3-center w3-padding-32">
                                 <span
-                                    onclick="document.getElementById('ticketModal')"
                                     style={{display:'none'}}
                                     className="w3-button w3-teal w3-xlarge w3-display-topright"
                                 >
@@ -237,7 +236,6 @@ class AboutUs extends Component {
                                 </button>
                                 <button
                                     className="w3-button w3-red w3-section"
-                                    onclick="document.getElementById('ticketModal')"
                                     style={{display:'none'}}
                                 >
                                     Close <i className="fa fa-remove"></i>
@@ -255,6 +253,7 @@ class AboutUs extends Component {
                     <div
                         className="w3-container w3-content w3-padding-64"
                         style={{maxWidth:'800px'}}
+                        ref={this.contact}
                         id="contact"
                     >
                         <h2 className="w3-wide w3-center">CONTACT</h2>

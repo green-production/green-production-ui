@@ -180,7 +180,7 @@ nav::after { content: ' '; display: block; clear: both; }
 nav ul { list-style: none; margin: 0; padding: 0; }
 
 nav ul li:hover { background-color: #2b0306; }
-nav ul li:hover > ul { display: block; }
+nav ul li:hover > ul { display: block; z-index: 10; }
 
 nav ul li a {
 	display: inline-block;
@@ -206,8 +206,9 @@ nav ul ul ul { left: 100%; top: 0; }
 nav > ul { padding-left: 200px; }
 nav > ul > li { float: left; }
 nav > ul > li.login-li, li.profile-menu {
-	float: right;
-	margin-right: 1rem;
+	position: absolute;
+    right: 1rem;
+	top: 0.4rem;
 }
 nav > ul > li > a { width: auto; padding: 10px 20px 15px 20px; }
 

@@ -21,6 +21,7 @@ const Profile = lazy(() => import("views/profile/index"));
 const Product = lazy(() => import("views/product/index"));
 const WatsonDiscovery = lazy(() => import("views/watson-discovery/index"));
 const AboutUs = lazy(() => import("views/about/index"));
+const Settings = lazy(() => import("views/settings/index"));
 
 
 const Main = props => {
@@ -93,8 +94,9 @@ const Main = props => {
                                 <Route 
                                     exact 
                                     path="/discover" 
-                                    render={() => (
+                                    render={prop => (
                                         <PrivateRoute 
+                                            {...prop}
                                             user={props.data}
                                             allowed={1}
                                             component={WatsonDiscovery}
@@ -103,11 +105,23 @@ const Main = props => {
                                 <Route 
                                     exact 
                                     path="/about-us" 
-                                    render={() => (
+                                    render={prop => (
                                         <PrivateRoute 
+                                            {...prop}
                                             user={props.data}
                                             allowed={1}
                                             component={AboutUs}
+                                        />)} 
+                                />
+                                <Route 
+                                    exact 
+                                    path="/settings" 
+                                    render={prop => (
+                                        <PrivateRoute 
+                                            {...prop}
+                                            user={props.data}
+                                            allowed={1}
+                                            component={Settings}
                                         />)} 
                                 />
                             </Suspense>

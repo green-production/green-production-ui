@@ -108,7 +108,48 @@ li.profile-menu {
     }
 }
 
+li.product-search {
+    float: right;
+    margin-right: 12rem;
+}
 .header-search {
     display: flex;
-    width: 20rem;
+
+    .choices-single-defaul {
+        height: 42px;
+        width: 7rem;
+        background: #222;
+        font-size: 18px;
+        outline: none;
+        color: #fff;
+        border: none;
+    }
+    .btn-search {
+        height: 42px;
+    }
+    .second-wrap input {
+        height: 42px;
+        width: 20rem;
+        background: #222;
+        color: #fff;
+        border: none;
+        font-size: 18px;
+        outline: none;
+        &::placeholder {
+            color:#fff;
+        }
+    }
+    .third-wrap > button {
+        background: #222;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        &:hover {
+            background: lighter(#222, 10%);
+        }
+        svg {
+            font-size: 16px;
+            margin-bottom: -2px;
+        }
+    }
 }

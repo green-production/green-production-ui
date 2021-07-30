@@ -6,7 +6,7 @@ class NotFound extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pageLoading: true,
+            pageLoading: false,
         };
     }
 
