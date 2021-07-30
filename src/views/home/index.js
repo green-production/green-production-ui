@@ -3,6 +3,7 @@ import photoSeating from 'assets/images/photo_seating.jpg'
 import photoLight from 'assets/images/photo_lighting.jpg'
 import Core from "../../services/core";
 import "./index.scss";
+import { Link } from "react-router-dom";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -17,15 +18,17 @@ class Dashboard extends Component {
         e.preventDefault()
     }
 
-    componentDidMount() {}
+    componentDidMount() { }
 
     render() {
         return (
             <div className="listing-section">
                 <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-1"></div>
-                    </div>
+                    <Link to="/product" title="Product">
+                        <div className="image-box">
+                            <div className="images" id="image-1"></div>
+                        </div>
+                    </Link>
                     <div className="text-box">
                         <h2 className="item">Orange</h2>
                         <h3 className="price">$4.99</h3>
@@ -36,9 +39,11 @@ class Dashboard extends Component {
                     </div>
                 </div>
                 <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-2"></div>
-                    </div>
+                    <Link to="/product" title="Product">
+                        <div className="image-box">
+                            <div className="images" id="image-2"></div>
+                        </div>
+                    </Link>
                     <div className="text-box">
                         <h2 className="item">Apple</h2>
                         <h3 className="price">$4.99</h3>
@@ -49,9 +54,11 @@ class Dashboard extends Component {
                     </div>
                 </div>
                 <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-3"></div>
-                    </div>
+                    <Link to="/product" title="Product">
+                        <div className="image-box">
+                            <div className="images" id="image-3"></div>
+                        </div>
+                    </Link>
                     <div className="text-box">
                         <h2 className="item">Passionfruit</h2>
                         <h3 className="price">$4.99</h3>
@@ -293,7 +300,7 @@ class Dashboard extends Component {
             //             <p className="quote">Lorem ipsum dolor sit amet conse ctetuer adipiscing elit. Morbi comod sed dolor sit amet consect adipiscing elit.</p>
             //             <p className="credit"><strong>Author Name</strong><br/> <em>Business Title</em><br/> Company</p>
             //         </blockquote>
-                    
+
             //     </section>
 
             // </div>
