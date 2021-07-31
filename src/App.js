@@ -19,6 +19,7 @@ const AboutUs = lazy(() => import("views/about/index"));
 const Settings = lazy(() => import("views/settings/index"));
 const Seller = lazy(() => import("views/seller/index"));
 const SellerUpload = lazy(() => import("views/product-upload/index"));
+const Cart = lazy(() => import("views/cart/index"));
 
 const Main = (props) => {
     const { userDetails } = useContext(AuthContext);
@@ -165,6 +166,19 @@ const Main = (props) => {
                             user={roles}
                             allowed={[2]}
                             component={SellerUpload}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/cart"
+                    render={(prop) => (
+                        <PrivateRoute
+                            {...prop}
+                            context={context} 
+                            user={roles}
+                            allowed={[2]}
+                            component={Cart}
                         />
                     )}
                 />
