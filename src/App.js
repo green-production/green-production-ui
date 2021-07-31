@@ -177,7 +177,7 @@ const Main = (props) => {
                             {...prop}
                             context={context} 
                             user={roles}
-                            allowed={[2]}
+                            allowed={[1, 2, 4]}
                             component={Cart}
                         />
                     )}
