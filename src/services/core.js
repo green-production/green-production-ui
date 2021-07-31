@@ -21,6 +21,10 @@ const Core = {
     deleteUser(data) {
         return httpService.post(appSettings.deleteUser, data);
     },
+
+    sellerProducts(data) {
+        return httpService.post(appSettings.sellerProducts, data);
+    },
 };
 
 export default Core;

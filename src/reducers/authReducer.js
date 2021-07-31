@@ -8,6 +8,10 @@ const authReducer = (state, action) => {
             return action.res;
         case "WATSON-DISCOVERY":
             return action.res
+        case "IS-SELLER":
+            return action.res
+        case "IS-ADMIN":
+            return action.res
         default:
             return state;
     }

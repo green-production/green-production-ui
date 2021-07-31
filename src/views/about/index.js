@@ -22,7 +22,7 @@ class AboutUs extends Component {
         dispatchWatsonDiscovery({ type: "WATSON-DISCOVERY", res: true });
         
         if(this.props.history?.location?.hash === '#contact') {
-            window.scrollTo(0, this.contact.current.offsetTop)   
+            window.scrollTo(0, this.contact.current.offsetTop)
         }
     }
 

@@ -50,6 +50,7 @@ class Profile extends Component {
     }
 
     render() {
+        const { userDetails } = this.context;
         return (
             <div className="container bootstrap snippet">
                 <div className="row">
@@ -112,7 +113,7 @@ class Profile extends Component {
                                             Full Name
                                         </Form.Label>
                                         <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.FullName} />
+                                            <Form.Control plaintext readOnly defaultValue={userDetails?.full_name} />
                                         </Col>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3" controlId="formFullName">
@@ -120,7 +121,7 @@ class Profile extends Component {
                                             Email
                                         </Form.Label>
                                         <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Email} />
+                                            <Form.Control plaintext readOnly defaultValue={userDetails?.email} />
                                         </Col>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3" controlId="gender">
@@ -128,7 +129,7 @@ class Profile extends Component {
                                             Gender
                                         </Form.Label>
                                         <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Gender} />
+                                            <Form.Control plaintext readOnly defaultValue={userDetails?.gender} />
                                         </Col>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3" controlId="fomDob">
@@ -136,7 +137,7 @@ class Profile extends Component {
                                             DOB
                                         </Form.Label>
                                         <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Dob} />
+                                            <Form.Control plaintext readOnly defaultValue={userDetails?.dob} />
                                         </Col>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3" controlId="formstreetaddress1">
@@ -144,7 +145,7 @@ class Profile extends Component {
                                             Street Address 1
                                         </Form.Label>
                                         <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.StreetAddress1} />
+                                            <Form.Control plaintext readOnly defaultValue={userDetails?.StreetAddress1} />
                                         </Col>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3" controlId="formstreetaddress2">
@@ -152,7 +153,7 @@ class Profile extends Component {
                                             Street Address 2
                                         </Form.Label>
                                         <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.StreetAddress2} />
+                                            <Form.Control plaintext readOnly defaultValue={userDetails?.StreetAddress2} />
                                         </Col>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3" controlId="formCity">
@@ -160,7 +161,7 @@ class Profile extends Component {
                                             City
                                         </Form.Label>
                                         <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.City} />
+                                            <Form.Control plaintext readOnly defaultValue={userDetails?.city} />
                                         </Col>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3" controlId="formState">
@@ -168,7 +169,7 @@ class Profile extends Component {
                                             State
                                         </Form.Label>
                                         <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.State} />
+                                            <Form.Control plaintext readOnly defaultValue={userDetails?.state} />
                                         </Col>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3" controlId="formZip">
@@ -176,7 +177,7 @@ class Profile extends Component {
                                             Zip
                                         </Form.Label>
                                         <Col sm="10">
-                                            <Form.Control plaintext readOnly defaultValue={this.state.userData?.Zip} />
+                                            <Form.Control plaintext readOnly defaultValue={userDetails?.zip} />
                                         </Col>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3" controlId="formRole">

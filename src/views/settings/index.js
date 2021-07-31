@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from '../../context/authContext'
+import { AuthContext } from "../../context/authContext";
 import Core from "../../services/core";
 import handleError from "../../services/errorHandler";
 import Loading from "components/loader/index";
+import Roles from "constants/roles";
 import "./index.scss";
 
 class Settings extends Component {
@@ -12,93 +13,189 @@ class Settings extends Component {
         super(props);
         this.state = {
             pageLoading: false,
-            user_name: ''
+            user_name: "",
+            oldPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+            errorMsg: "",
+            successMsg: "",
         };
         this.security = React.createRef();
+        this.profile = React.createRef();
     }
 
     componentDidMount() {
         const { isAuthenticated } = this.context;
         if (!isAuthenticated) {
-            this.props.history.push('/login')
+            this.props.history.push("/login");
         }
 
-        if(this.props.history?.location?.param === 'security') {
-            this.security.current.click()
+        if (this.props.history?.location?.param === "security") {
+            this.security.current.click();
+        } else {
+            window.scrollTo(0, this.profile.current.offsetTop + 100);
         }
     }
 
-    changeInput = e => {
-        console.log(e, e.target.id, e.target.value)
+    changeInput = (e) => {
+        console.log(e, e.target.id, e.target.value);
         this.setState({
-            [e.target.id]: e.target.value
+            [e.target.id]: e.target.value,
         });
-    }
+    };
 
-    handleSubmit = async e => {
-        e.preventDefault(); 
-        const { userDetails } = this.context;
+    sellerAccount = async e => {
+        e.preventDefault();
+        this.setState({ pageLoading: true });
+        const { userDetails, userDispatch, dispatchSeller } =
+            this.context;
         const request = {
             user_ID: userDetails.user_ID,
-            user_name: this.state.user_name,
+            RoleID: Roles.SELLER
         };
-        this.setState({ pageLoading: true });
         try {
             const res = await Core.updateUser(request);
             if (res) {
-                this.updateSuccess(res);
+                this.setState({ errorMsg: "" });
+
+                delete res.token;
+                if (userDetails.imgUrl) {
+                    res.imgUrl = userDetails.imgUrl;
+                }
+
+                userDispatch({ type: "USER-DETAILS", res });
+                const checkStatus = res.role.find(v => v.Name === 'SELLER')['ActiveStatus']
+
+                this.setState({
+                    successMsg: "Seller account created successfully"
+                });
+                setTimeout(() => {
+                    this.setState({ successMsg: "" }, () => {
+                        dispatchSeller({ type: "IS-SELLER", res: checkStatus });
+                        this.props.history.push("/");
+                    });
+                }, 1000);
             }
         } catch (error) {
+            this.setState({ errorMsg: "Error creating account" });
             handleError(error);
         }
         this.setState({ pageLoading: false });
     }
 
+    handleSubmit = async (e, p) => {
+        e.preventDefault();
+        let msg;
+        try {
+            const { userDetails } = this.context;
+            if (
+                p === "password" &&
+                userDetails.password !== this.state.oldPassword
+            ) {
+                msg = "Old password incorrect";
+                throw new Error(msg);
+            } else if (
+                p === "password" &&
+                this.state.newPassword !== this.state.confirmPassword
+            ) {
+                msg = "New and confirm passwords don't match";
+                throw new Error(msg);
+            }
+            const request =
+                p !== "password"
+                    ? {
+                          user_ID: userDetails.user_ID,
+                          user_name: this.state.user_name,
+                      }
+                    : {
+                          user_ID: userDetails.user_ID,
+                          password: this.state.newPassword,
+                      };
+            this.setState({ pageLoading: true });
+            const res = await Core.updateUser(request);
+            if (res) {
+                this.setState({
+                    errorMsg: "",
+                    user_name: "",
+                    oldPassword: "",
+                    newPassword: "",
+                    confirmPassword: "",
+                });
+                this.setState({
+                    successMsg:
+                        p !== "password"
+                            ? "Username updated successfully"
+                            : "Password changed successfully",
+                });
+                setTimeout(() => {
+                    this.setState({ successMsg: "" });
+                }, 3000);
+                this.updateSuccess(res);
+            }
+        } catch (error) {
+            this.setState({
+                errorMsg: p !== "password" ? "Error updating username" : msg,
+            });
+            handleError(error);
+        }
+        this.setState({ pageLoading: false });
+    };
+
     updateSuccess = (res) => {
         const { userDispatch, userDetails } = this.context;
-        
+
         delete res.token;
-        if(userDetails.imgUrl) {
-            res.imgUrl = userDetails.imgUrl
+        if (userDetails.imgUrl) {
+            res.imgUrl = userDetails.imgUrl;
         }
         userDispatch({ type: "USER-DETAILS", res });
     };
 
-    deleteAccount = async e => {
-        e.preventDefault()
+    deleteAccount = async (e) => {
+        e.preventDefault();
         this.setState({ pageLoading: true });
-        const { userDetails, dispatch, jwtDispatch, userDispatch } = this.context;
+        const { userDetails, dispatch, jwtDispatch, userDispatch } =
+            this.context;
         const request = {
-            user_ID: userDetails.user_ID
+            user_ID: userDetails.user_ID,
         };
         try {
             const res = await Core.deleteUser(request);
-            debugger
             if (res) {
+                this.setState({ errorMsg: "" });
                 dispatch({ type: "LOGIN-LOGOUT" });
                 jwtDispatch({ type: "JWT-TOKEN", token: "" });
                 userDispatch({ type: "USER-DETAILS", res: null });
                 this.props.history.push("/login");
             }
         } catch (error) {
+            this.setState({ errorMsg: "Error deleting account" });
             handleError(error);
         }
         this.setState({ pageLoading: false });
-    }
+    };
 
     render() {
-        const { userDetails } = this.context;
-        const {user_name, pageLoading} = this.state
-        const profilePath = { 
-            pathname: "/profile", 
-            param: "edit" 
+        const { userDetails, isSeller } = this.context;
+        const {
+            user_name,
+            pageLoading,
+            oldPassword,
+            newPassword,
+            confirmPassword,
+            errorMsg,
+            successMsg,
+        } = this.state;
+        const profilePath = {
+            pathname: "/profile",
+            param: "edit",
         };
 
         return (
             <div className="page-settings">
                 {pageLoading ? <Loading /> : ""}
                 <div className="container">
-                    <h1 className="page-settings-header">Settings</h1>
+                    <h1 className="page-settings-header">Seller</h1>
                     <div className="row gutters-sm">
                         <div className="col-md-4 d-none d-md-block">
                             <div className="card">
@@ -106,6 +203,7 @@ class Settings extends Component {
                                     <nav className="nav flex-column nav-pills nav-gap-y-1">
                                         <a
                                             href="#profile"
+                                            ref={this.profile}
                                             data-toggle="tab"
                                             className="nav-item nav-link has-icon nav-link-faded active"
                                         >
@@ -200,6 +298,36 @@ class Settings extends Component {
                                             </svg>
                                             Notification
                                         </a>
+                                        {
+                                            !isSeller &&
+                                            <a
+                                                href="#seller"
+                                                ref={this.profile}
+                                                data-toggle="tab"
+                                                className="nav-item nav-link has-icon nav-link-faded"
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="24"
+                                                    height="24"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="feather feather-user mr-2"
+                                                >
+                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                    <circle
+                                                        cx="12"
+                                                        cy="7"
+                                                        r="4"
+                                                    ></circle>
+                                                </svg>
+                                                Seller Account
+                                            </a>
+                                        }
                                     </nav>
                                 </div>
                             </div>
@@ -310,41 +438,6 @@ class Settings extends Component {
                                                 </svg>
                                             </a>
                                         </li>
-                                        <li className="nav-item">
-                                            <a
-                                                href="#billing"
-                                                data-toggle="tab"
-                                                className="nav-link has-icon"
-                                            >
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="24"
-                                                    height="24"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    className="feather feather-credit-card"
-                                                >
-                                                    <rect
-                                                        x="1"
-                                                        y="4"
-                                                        width="22"
-                                                        height="16"
-                                                        rx="2"
-                                                        ry="2"
-                                                    ></rect>
-                                                    <line
-                                                        x1="1"
-                                                        y1="10"
-                                                        x2="23"
-                                                        y2="10"
-                                                    ></line>
-                                                </svg>
-                                            </a>
-                                        </li>
                                     </ul>
                                 </div>
                                 <div className="card-body tab-content">
@@ -363,9 +456,12 @@ class Settings extends Component {
                                                     type="text"
                                                     className="form-control"
                                                     id="fullName"
+                                                    readOnly
                                                     aria-describedby="fullNameHelp"
                                                     placeholder="Enter your fullname"
-                                                    value={userDetails?.full_name}
+                                                    value={
+                                                        userDetails?.full_name
+                                                    }
                                                 />
                                                 <small
                                                     id="fullNameHelp"
@@ -385,17 +481,23 @@ class Settings extends Component {
                                                     type="text"
                                                     className="form-control"
                                                     id="fullName"
+                                                    readOnly
                                                     aria-describedby="fullNameHelp"
                                                     placeholder="Enter your username"
-                                                    value={userDetails?.user_name}
+                                                    value={
+                                                        userDetails?.user_name
+                                                    }
                                                 />
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="url">Gender</label>
+                                                <label htmlFor="url">
+                                                    Gender
+                                                </label>
                                                 <input
                                                     type="text"
                                                     className="form-control"
                                                     id="url"
+                                                    readOnly
                                                     placeholder="Enter your gender"
                                                     value={userDetails?.gender}
                                                 />
@@ -408,6 +510,7 @@ class Settings extends Component {
                                                     type="text"
                                                     className="form-control"
                                                     id="location"
+                                                    readOnly
                                                     placeholder="Enter your DOB"
                                                     value={userDetails?.dob}
                                                 />
@@ -424,7 +527,9 @@ class Settings extends Component {
                                                 type="button"
                                                 className="btn btn-primary"
                                             >
-                                                <Link to={profilePath}>Edit Profile</Link>
+                                                <Link to={profilePath}>
+                                                    Edit Profile
+                                                </Link>
                                             </button>
                                         </form>
                                     </div>
@@ -440,6 +545,7 @@ class Settings extends Component {
                                                     type="text"
                                                     className="form-control"
                                                     id="user_name"
+                                                    required
                                                     aria-describedby="usernameHelp"
                                                     placeholder="Enter your username"
                                                     onChange={this.changeInput}
@@ -484,30 +590,49 @@ class Settings extends Component {
                                     <div className="tab-pane" id="security">
                                         <h6>SECURITY SETTINGS</h6>
                                         <hr />
-                                        <form>
+                                        <form
+                                            onSubmit={(e) =>
+                                                this.handleSubmit(e, "password")
+                                            }
+                                        >
                                             <div className="form-group">
                                                 <label className="d-block">
                                                     Change Password
                                                 </label>
                                                 <input
-                                                    type="text"
+                                                    type="password"
                                                     className="form-control"
+                                                    id="oldPassword"
+                                                    required
+                                                    minLength="8"
+                                                    value={oldPassword}
+                                                    onChange={this.changeInput}
                                                     placeholder="Enter your old password"
                                                 />
                                                 <input
-                                                    type="text"
+                                                    type="password"
                                                     className="form-control mt-1"
+                                                    id="newPassword"
+                                                    required
+                                                    minLength="8"
+                                                    value={newPassword}
+                                                    onChange={this.changeInput}
                                                     placeholder="New password"
                                                 />
                                                 <input
-                                                    type="text"
+                                                    type="password"
                                                     className="form-control mt-1"
+                                                    id="confirmPassword"
+                                                    required
+                                                    minLength="8"
+                                                    value={confirmPassword}
+                                                    onChange={this.changeInput}
                                                     placeholder="Confirm new password"
                                                 />
                                             </div>
                                             <button
                                                 className="btn btn-info"
-                                                type="button"
+                                                type="submit"
                                             >
                                                 Submit
                                             </button>
@@ -552,7 +677,6 @@ class Settings extends Component {
                                                         type="checkbox"
                                                         className="custom-control-input"
                                                         id="customCheck1"
-                                                        checked=""
                                                     />
                                                     <label
                                                         className="custom-control-label"
@@ -567,7 +691,6 @@ class Settings extends Component {
                                                         type="checkbox"
                                                         className="custom-control-input"
                                                         id="customCheck2"
-                                                        checked=""
                                                     />
                                                     <label
                                                         className="custom-control-label"
@@ -590,7 +713,6 @@ class Settings extends Component {
                                                                 type="checkbox"
                                                                 className="custom-control-input"
                                                                 id="customSwitch1"
-                                                                checked=""
                                                             />
                                                             <label
                                                                 className="custom-control-label"
@@ -619,7 +741,6 @@ class Settings extends Component {
                                                                 type="checkbox"
                                                                 className="custom-control-input"
                                                                 id="customSwitch3"
-                                                                checked=""
                                                             />
                                                             <label
                                                                 className="custom-control-label"
@@ -634,7 +755,6 @@ class Settings extends Component {
                                                                 type="checkbox"
                                                                 className="custom-control-input"
                                                                 id="customSwitch4"
-                                                                checked=""
                                                             />
                                                             <label
                                                                 className="custom-control-label"
@@ -660,7 +780,48 @@ class Settings extends Component {
                                             </div>
                                         </form>
                                     </div>
+                                    <div className="tab-pane" id="seller">
+                                        <h6>CREATE YOUR SELLER ACCOUNT</h6>
+                                        <hr />
+                                        <form>
+                                            <div className="form-group">
+                                                <label className="d-block">
+                                                    Seller account creation
+                                                </label>
+                                                <button
+                                                    className="btn btn-info"
+                                                    type="button"
+                                                    onClick={this.sellerAccount}
+                                                >
+                                                    Click to Create your Seller
+                                                    Account
+                                                </button>
+                                                <p className="small text-muted seller-des mt-2">
+                                                    Seller account will enable
+                                                    you to sell/promote any
+                                                    material or products of any
+                                                    kind which are eco-friendly,
+                                                    recyclable, re-usable, and
+                                                    would go a long way in
+                                                    fostering healthy balance
+                                                    between consumption and
+                                                    production, and therby
+                                                    combat cliate change.
+                                                </p>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
+                                {!!errorMsg && (
+                                    <div className="error-body">
+                                        <span>{errorMsg}</span>
+                                    </div>
+                                )}
+                                {!!successMsg && (
+                                    <div className="success-body">
+                                        <span>{successMsg}</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

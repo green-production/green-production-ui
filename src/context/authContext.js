@@ -15,6 +15,11 @@ const AuthContextProvider = (props) => {
         return JSON.parse(sessionStorage.getItem("userDetails"));
     });
     const [isWatsonDiscovery, dispatchWatsonDiscovery] = useReducer(authReducer, false);
+    const [isSeller, dispatchSeller] = useReducer(authReducer, false, () => {
+        const data = JSON.parse(sessionStorage.getItem("isSeller"));
+        return !!data;
+    });
+    const [isAdmin, dispatchAdmin] = useReducer(authReducer, false);
 
     useEffect(() => {
         sessionStorage.setItem("isAuthenticated", isAuthenticated);
@@ -28,6 +33,10 @@ const AuthContextProvider = (props) => {
         sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
     }, [userDetails]);
 
+    useEffect(() => {
+        sessionStorage.setItem("isSeller", JSON.stringify(isSeller));
+    }, [isSeller]);
+
     return (
         <AuthContext.Provider
             value={{
@@ -35,9 +44,13 @@ const AuthContextProvider = (props) => {
                 jwtToken,
                 userDetails,
                 isWatsonDiscovery,
+                isSeller,
+                isAdmin,
                 dispatch,
                 jwtDispatch,
                 userDispatch,
+                dispatchSeller,
+                dispatchAdmin,
                 dispatchWatsonDiscovery
             }}
         >

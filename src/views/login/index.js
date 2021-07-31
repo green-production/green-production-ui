@@ -78,7 +78,7 @@ class Login extends Component {
                       },
                   ],
               };
-        console.log("formData", this.state.formData, value);
+
         this.setState({ pageLoading: true });
         try {
             const res = await Core[this.state.isLogin ? 'loginService' : 'signupService'](request);
@@ -87,6 +87,7 @@ class Login extends Component {
             }
         } catch (error) {
             this.setState({isError: true})
+            this.setState({errorMsg: "Error while registering. Try again."})
             handleError(error);
         }
         this.setState({ pageLoading: false });
@@ -146,6 +147,7 @@ class Login extends Component {
             }
         } catch (error) {
             this.setState({isError: true})
+            this.setState({errorMsg: "Invalid username or password"})
             handleError(error);
         }
         this.setState({ pageLoading: false });

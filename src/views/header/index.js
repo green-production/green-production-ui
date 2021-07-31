@@ -78,8 +78,7 @@ class Header extends Component {
     componentDidMount() {
         setTimeout(() => {
             this.setState({ pageLoading: false });
-        }, 500);
-        console.log("this.props.history", this.props.history)
+        }, 400);
     }
 
     successResponseGoogle = () => {
@@ -97,7 +96,7 @@ class Header extends Component {
     };
 
     render() {
-        const { isAuthenticated, isWatsonDiscovery, userDetails } =
+        const { isAuthenticated, isSeller, isWatsonDiscovery, userDetails } =
             this.context;
         const profilePath = { 
             pathname: "/profile", 
@@ -166,70 +165,53 @@ class Header extends Component {
                                 About us
                             </Link>
                         </li>
-                        <li>
-                            <a
-                                title="Design Corner"
-                                href="javascript:void(0)"
-                                aria-haspopup="true"
-                                onClick={this.onClick}
-                            >
-                                Design Corner
-                            </a>
-                            <ul>
-                                <li>
-                                    <a
-                                        title="Sub link 1"
-                                        href="javascript:void(0)"
-                                        onClick={this.onClick}
-                                    >
-                                        {" "}
-                                        Sub Link 1
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        title="Sub link 2"
-                                        href="javascript:void(0)"
-                                        onClick={this.onClick}
-                                    >
-                                        {" "}
-                                        Sub Link 2
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        title="Sub link 3"
-                                        href="javascript:void(0)"
-                                        aria-haspopup="true"
-                                    >
-                                        {" "}
-                                        Sub Link 3
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a
-                                                title="Sub Sub link 1"
-                                                href="javascript:void(0)"
-                                                onClick={this.onClick}
-                                            >
-                                                {" "}
-                                                Sub Sub Link 1
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                title="Sub Sub link 2"
-                                                href="javascript:void(0)"
-                                                onClick={this.onClick}
-                                            >
-                                                {" "}
-                                                Sub Sub Link 2
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
+                        {
+                            isSeller &&
+                            <li>
+                                <a
+                                    title="Design Corner"
+                                    href="javascript:void(0)"
+                                    aria-haspopup="true"
+                                    onClick={this.onClick}
+                                >
+                                    Seller Corner
+                                </a>
+                                <ul>
+                                    <li>
+                                        <Link title="Seller account" to="/seller">
+                                            View Account
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <a
+                                            title="Sub link 3"
+                                            href="javascript:void(0)"
+                                            aria-haspopup="true"
+                                        >
+                                            {" "}
+                                            Products
+                                        </a>
+                                        <ul>
+                                            <li>
+                                            <Link title="Upload Items" to="/seller-upload">
+                                                Upload Items
+                                            </Link>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    title="Sub Sub link 2"
+                                                    href="javascript:void(0)"
+                                                    onClick={this.onClick}
+                                                >
+                                                    {" "}
+                                                    Modify Existing Products
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
                         <li>
                             <a
                                 title="Products"

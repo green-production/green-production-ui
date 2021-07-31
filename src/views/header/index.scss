@@ -123,6 +123,7 @@ li.product-search {
         outline: none;
         color: #fff;
         border: none;
+        border-top: 1px solid #ccc;
     }
     .btn-search {
         height: 42px;
@@ -133,6 +134,7 @@ li.product-search {
         background: #222;
         color: #fff;
         border: none;
+        border-top: 1px solid #ccc;
         font-size: 18px;
         outline: none;
         &::placeholder {
@@ -143,6 +145,7 @@ li.product-search {
         background: #222;
         color: #fff;
         border: none;
+        border-top: 1px solid #ccc;
         cursor: pointer;
         &:hover {
             background: lighter(#222, 10%);
