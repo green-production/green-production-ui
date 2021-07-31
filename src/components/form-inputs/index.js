@@ -2,7 +2,7 @@
 export const InputForm = props => {
     return (
         <div className="form-group">
-            <label htmlFor={props.id}></label>
+            <label htmlFor={props.id}>{props.cat ? props.placeholder : ''}</label>
             <input
                 className="form-control"
                 type={props.type}
@@ -12,6 +12,7 @@ export const InputForm = props => {
                 placeholder={props.placeholder}
                 onChange={props.onChange}
                 required={props.required}
+                {...props}
             />
         </div>
     )
@@ -20,7 +21,7 @@ export const InputForm = props => {
 export const Dropdown = props => {
     return (
         <div className="form-group">
-            <label htmlFor={props.id}></label>
+            <label htmlFor={props.id}>{props.cat ? props.placeholder : ''}</label>
             <select 
                 name={props.id}
                 id={props.id}

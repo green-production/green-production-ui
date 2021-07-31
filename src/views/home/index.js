@@ -3,6 +3,7 @@ import photoSeating from 'assets/images/photo_seating.jpg'
 import photoLight from 'assets/images/photo_lighting.jpg'
 import Core from "../../services/core";
 import "./index.scss";
+import "../home/index.scss";
 import { Link } from "react-router-dom";
 
 class Dashboard extends Component {

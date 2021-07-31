@@ -25,6 +25,10 @@ const Core = {
     sellerProducts(data) {
         return httpService.post(appSettings.sellerProducts, data);
     },
+
+    newProduct(data) {
+        return httpService.post(appSettings.newProduct, data);
+    },
 };
 
 export default Core;
