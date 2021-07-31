@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import photoSeating from 'assets/images/photo_seating.jpg'
 import photoLight from 'assets/images/photo_lighting.jpg'
 import Core from "../../services/core";
+import handleError from "../../services/errorHandler";
+import Loading from "components/loader/index";
 import "./index.scss";
 import "../home/index.scss";
 import { Link } from "react-router-dom";
@@ -11,7 +13,9 @@ class Dashboard extends Component {
         super(props);
         this.state = {
             pageLoading: true,
-            search: ''
+            search: '',
+            errorMsg: "",
+            productsList: <div className="no=products">You do not have any items to sell right now. Click the 'Upload Items' button to strat uploading.</div>,
         };
     }
 
@@ -20,206 +24,78 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0)
+
+        this.getSellerProducts()
+    }
+
+    arrayBufferToBase64( buffer ) {
+        let binary = '';
+        const bytes = new Uint8Array( buffer );
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        return window.btoa( binary );
+
+    }
+
+    async getSellerProducts() {
+        this.setState({ pageLoading: true });
+        try {
+            const res = await Core.allProduct();
+            if (res) {
+                this.success(res)
+            }
+        } catch (error) {
+            this.setState({ errorMsg: "Error fetching products list" });
+            handleError(error);
+        }
+        this.setState({ pageLoading: false });
+    }
+
+    success = res => {
+        this.setState({ errorMsg: "" });
+
+        const store = res.data.map((item, ind) => {
+            if(ind < 100) {
+                const buffer = this.arrayBufferToBase64(item?.image_buffer?.data);
+                const imga = 'data:image/png;base64,' + buffer
+                return (
+                    <div className="product" key={ind}>
+                        <Link to="/product" title="Product">
+                            <div className="image-box">
+                                <div className="images">
+                                    <img
+                                        src={imga}
+                                        alt="product_img"
+                                    />
+                                </div>
+                            </div>
+                        </Link>
+                        <div className="text-box">
+                            <h2 className="item">{item.product_name}</h2>
+                            <h3 className="price">{item.unit_price}</h3>
+                            <p className="description">Materials used: {item.product_material}</p>
+                            <p className="description">Recycling code: {item.recycling_code}</p>
+                            <p className="description">Item uploaded on: {item.created_dt.substr(0, item.created_dt.indexOf('T'))}</p>
+                            <label htmlFor="item-1-quantity">Quantity: </label>
+                            <input type="number" name="item-1-quantity" id="item-1-quantity" value={item.quantity} />
+                            <button type="button" name="item-1-button" id="item-1-button">Add to Cart</button>
+                        </div>
+                    </div>
+                )
+            }
+        })
+        this.setState({productsList: store})
     }
 
     render() {
         return (
             <div className="listing-section">
-                <div className="product">
-                    <Link to="/product" title="Product">
-                        <div className="image-box">
-                            <div className="images" id="image-1"></div>
-                        </div>
-                    </Link>
-                    <div className="text-box">
-                        <h2 className="item">Orange</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious oranges!</p>
-                        <label htmlFor="item-1-quantity">Quantity:</label>
-                        <input type="text" name="item-1-quantity" id="item-1-quantity" value="1" />
-                        <button type="button" name="item-1-button" id="item-1-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div className="product">
-                    <Link to="/product" title="Product">
-                        <div className="image-box">
-                            <div className="images" id="image-2"></div>
-                        </div>
-                    </Link>
-                    <div className="text-box">
-                        <h2 className="item">Apple</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious apples!</p>
-                        <label htmlFor="item-2-quantity">Quantity:</label>
-                        <input type="text" name="item-2-quantity" id="item-2-quantity" value="1" />
-                        <button type="button" name="item-2-button" id="item-2-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div className="product">
-                    <Link to="/product" title="Product">
-                        <div className="image-box">
-                            <div className="images" id="image-3"></div>
-                        </div>
-                    </Link>
-                    <div className="text-box">
-                        <h2 className="item">Passionfruit</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious passionfruit!</p>
-                        <label htmlFor="item-3-quantity">Quantity:</label>
-                        <input type="text" name="item-3-quantity" id="item-3-quantity" value="1" />
-                        <button type="button" name="item-3-button" id="item-3-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-4"></div>
-                    </div>
-                    <div className="text-box">
-                        <h2 className="item">Pineapple</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious pineapples!</p>
-                        <label htmlFor="item-4-quantity">Quantity:</label>
-                        <input type="text" name="item-4-quantity" id="item-4-quantity" value="1" />
-                        <button type="button" name="item-4-button" id="item-4-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-5"></div>
-                    </div>
-                    <div className="text-box">
-                        <h2 className="item">Mango</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious mangos!</p>
-                        <label htmlFor="item-5-quantity">Quantity:</label>
-                        <input type="text" name="item-5-quantity" id="item-5-quantity" value="1" />
-                        <button type="button" name="item-5-button" id="item-5-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-6"></div>
-                    </div>
-                    <div className="text-box">
-                        <h2 className="item">Coconut</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious coconuts!</p>
-                        <label htmlFor="item-6-quantity">Quantity:</label>
-                        <input type="text" name="item-6-quantity" id="item-6-quantity" value="1" />
-                        <button type="button" name="item-6-button" id="item-6-button">Add to Cart</button>
-                    </div>
-                </div>
-                {/* <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-7"></div>
-                    </div>
-                    <div className="text-box">
-                        <h2 className="item">Banana</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious bananas!</p>
-                        <label htmlFor="item-7-quantity">Quantity:</label>
-                        <input type="text" name="item-7-quantity" id="item-7-quantity" value="1" />
-                        <button type="button" name="item-7-button" id="item-7-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-8"></div>
-                    </div>
-                    <div className="text-box">
-                        <h2 className="item">Plum</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious plums!</p>
-                        <label htmlFor="item-8-quantity">Quantity:</label>
-                        <input type="text" name="item-8-quantity" id="item-8-quantity" value="1" />
-                        <button type="button" name="item-8-button" id="item-8-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-9"></div>
-                    </div>
-                    <div className="text-box">
-                        <h2 className="item">Avocado</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious avocados!</p>
-                        <label htmlFor="item-9-quantity">Quantity:</label>
-                        <input type="text" name="item-9-quantity" id="item-9-quantity" value="1" />
-                        <button type="button" name="item-9-button" id="item-9-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="image-box">
-                        <div className="images" id="image-10"></div>
-                    </div>
-                    <div className="text-box">
-                        <h2 className="item">Lemon</h2>
-                        <h3 className="price">$4.99</h3>
-                        <p className="description">A bag of delicious lemons!</p>
-                        <label htmlFor="item-10-quantity">Quantity:</label>
-                        <input type="text" name="item-10-quantity" id="item-10-quantity" value="1" />
-                            <button type="button" name="item-10-button" id="item-10-button">Add to Cart</button>
-                    </div>
-                </div> */}
+                {this.state.pageLoading ? <Loading /> : ""}
+                {this.state.productsList}
             </div>
-            // <div className="dashboard">
-            //     <section className="main">
-            //         <aside>
-            //             <div className="content trending">
-            //                 <h3><a href="javascript:void(0)" onClick={this.onClick}>What&apos;s trending</a></h3>
-            //                 <p>Lorem ipsum dolor sit amet, consect etuer adipiscing elit. <a href="http://codifydesign.com">Morbi commodo</a>, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis.</p>
-            //             </div>
-            //         </aside>
-
-            //         <aside>
-            //             <div className="content find-it">
-            //                 <h3><a href="javascript:void(0)" onClick={this.onClick}>Where to find it</a></h3>
-            //                 <p>Morbi commodo, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis. Nullam sit amet enim. Lorem ipsum dolor sit amet, consect.</p>
-            //             </div>
-            //         </aside>
-
-            //         <aside>
-            //             <div className="content tools">
-            //                 <h3><a href="javascript:void(0)" onClick={this.onClick}>Tools of the trade</a></h3>
-            //                 <p>Nullam sit amet enim. Lorem ipsum dolor sit amet, consect etuer adipiscing elit. Morbi commodo, ipsum sed pharetra gravida, orci rhoncus neque, id pulvinar odio.</p>
-            //             </div>
-            //         </aside>
-            //     </section>
-
-            //     <section className="atmosphere">
-            //         <article>
-            //             <h2>Creating a modern atmospheer</h2>
-            //             <p>Morbi commodo, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis. Lorem ipsum dolor sit amet etuer adipiscing elit.  Pulvinar odio lorem non turpis. Nullam sit amet enim lorem.</p>
-            //             <a className="btn" title="Creating a modern atmosphere" href="javascript:void(0)" onClick={this.onClick}>Learn more</a>
-            //         </article>
-            //     </section>
-
-            //     <section className="how-to">
-            //         <aside>
-            //             <div className="content">
-            //                 <img alt="Choosing the proper seating" src={photoSeating}/>
-            //                 <h4>How-To: Seating</h4>
-            //                 <p>Consectetuer adipiscing elit. Morbi commodo ipsum sed gravida orci magna rhoncus pulvinar odio lorem.</p>
-            //                 <a title="Learn how to choose the proper seating." href="http://codifydesign.com">Learn more</a>
-            //             </div>
-            //         </aside>
-            //         <aside>
-            //             <div className="content">
-            //                 <img alt="Choosing the proper lighting" src={photoLight}/>
-            //                 <h4>How-To: Lighting</h4>
-            //                 <p>Morbi commodo, ipsum sed pharetra gravida magna rhoncus neque id pulvinar odio lorem non turpis nullam sit amet.</p>
-            //                 <a title="Learn how to choose the proper lighting." href="http://codifydesign.com">Learn more</a>
-            //             </div>
-            //         </aside>
-            //         <blockquote>
-            //             <p className="quote">Lorem ipsum dolor sit amet conse ctetuer adipiscing elit. Morbi comod sed dolor sit amet consect adipiscing elit.</p>
-            //             <p className="credit"><strong>Author Name</strong><br/> <em>Business Title</em><br/> Company</p>
-            //         </blockquote>
-
-            //     </section>
-
-            // </div>
         );
     }
 }

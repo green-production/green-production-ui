@@ -6,6 +6,8 @@ const appSettings = {
     deleteUser: "deleteUser",
     sellerProducts: "sellerProducts",
     newProduct: "newProduct",
+    allProduct: "allProduct",
+    searchProducts: "searchProducts",
 };
 
 export default appSettings;

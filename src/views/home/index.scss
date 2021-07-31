@@ -10,6 +10,9 @@
     float: left;
     padding: 1%;
     z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
     background: RGB(89, 89, 89)
   }
   .listing-section {
@@ -18,6 +21,10 @@
       width: 23%;
       border-radius: 2%;
       margin: 1%;
+        img {
+            width: 100%;
+            height: 100%;
+        }
     }
     
     .product:hover {
