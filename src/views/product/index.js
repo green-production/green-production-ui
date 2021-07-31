@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, ListGroup, ListGroupItem, Col, Row, Card } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
+import product from "assets/images/mobile1.jpg";
 import "../home/index.scss";
 
 class Product extends Component {
@@ -20,37 +21,26 @@ class Product extends Component {
                     <Row>
                         <Col sm={4}>
                             <Card style={{ width: '18rem' }}>
-                                <Card.Img variant="top" src="https://sc01.alicdn.com/kf/UT8.CaXX2NXXXagOFbXC/fresh-navel-oranges.jpg" />
+                                <Card.Img variant="top" src={product} />
                                 <Card.Body>
-                                    <Card.Title>Product Detail</Card.Title>
+                                    <Card.Title>OPPO F17 (NAVY BLUE, 6GB RAM, 128GB STORAGE)</Card.Title>
                                     <Card.Text>
-                                        Some quick example text to build on the card title and make up the bulk of
-                                        the card's content.
+                                        Materials used: Materials used: Silicon, PLastic, Iron, Aluminium, Copper, Lead, Zinc, Tin, Nickel, Barium
                                     </Card.Text>
                                 </Card.Body>
                                 <ListGroup className="list-group-flush">
-                                    <ListGroupItem>Cras justo odio</ListGroupItem>
-                                    <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
+                                    <ListGroupItem>Recycling code: N/A</ListGroupItem>
+                                    <ListGroupItem>Item uploaded on: 2021-07-31</ListGroupItem>
                                 </ListGroup>
-                                <Card.Body>
-                                    <Card.Link href="#">Card Link</Card.Link>
-                                    <Card.Link href="#">Another Link</Card.Link>
-                                </Card.Body>
                             </Card>
                         </Col>
                         <Col sm={8}>
                             <Card>
                                 <Card.Header as="h5">Product Name</Card.Header>
                                 <Card.Body>
-                                    <Card.Title>Special title treatment</Card.Title>
+                                    <Card.Title>OPPO F17 (NAVY BLUE, 6GB RAM, 128GB STORAGE)</Card.Title>
                                     <Card.Text>
-                                        With supporting text below as a natural lead-in to additional content.
-                                        With supporting text below as a natural lead-in to additional content.
-                                        With supporting text below as a natural lead-in to additional content.
-                                        With supporting text below as a natural lead-in to additional content.
-                                        With supporting text below as a natural lead-in to additional content.
-                                        With supporting text below as a natural lead-in to additional content.
-                                        With supporting text below as a natural lead-in to additional content.
+                                        Materials used: Materials used: Silicon, PLastic, Iron, Aluminium, Copper, Lead, Zinc, Tin, Nickel, Barium
                                     </Card.Text>
                                     <Row>
                                         <Col sm={6}>

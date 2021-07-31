@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { FaUserAlt, FaSearch } from "react-icons/fa";
+import { FaUserAlt, FaSearch, FaShoppingCart } from "react-icons/fa";
 import GoogleLogout from "react-google-login";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
@@ -327,6 +327,12 @@ class Header extends Component {
                                 </div>
                             </li>
                         )}
+
+                        <li className="home-cart">
+                            <Link title="Cart" to="/cart">
+                                <FaShoppingCart />
+                            </Link>
+                        </li>
 
                         {isAuthenticated ? (
                             <li className="profile-menu">

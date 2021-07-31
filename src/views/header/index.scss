@@ -110,7 +110,15 @@ li.profile-menu {
 
 li.product-search {
     float: right;
-    margin-right: 12rem;
+    margin-right: 14rem;
+}
+li.home-cart {
+    float: right;
+    position: absolute;
+    font-size: 24px;
+    z-index: 100;
+    top: 5px;
+    right: 10rem;
 }
 .header-search {
     display: flex;

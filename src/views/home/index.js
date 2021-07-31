@@ -56,8 +56,8 @@ class Dashboard extends Component {
 
     success = (res, search) => {
         this.setState({ errorMsg: "" });
-        console.log('res', res)
-        const response = search ? res : res.data
+        console.log('res', res, search)
+        const response = res.data ? res.data : res
         const store = response.map((item, ind) => {
             if(ind < 100) {
                 const buffer = this.arrayBufferToBase64(item?.image_buffer?.data);
@@ -99,7 +99,6 @@ class Dashboard extends Component {
                 product_name: searchText,
             }
             try {
-                debugger
                 const res = await Core.searchProducts(request);
                 if (res) {
                     this.success(res, true)
