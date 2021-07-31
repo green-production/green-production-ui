@@ -15,6 +15,7 @@ const AuthContextProvider = (props) => {
         return JSON.parse(sessionStorage.getItem("userDetails"));
     });
     const [isWatsonDiscovery, dispatchWatsonDiscovery] = useReducer(authReducer, false);
+    const [searchText, dispatchSearch] = useReducer(authReducer, '');
     const [isSeller, dispatchSeller] = useReducer(authReducer, false, () => {
         const data = JSON.parse(sessionStorage.getItem("isSeller"));
         return !!data;
@@ -46,12 +47,14 @@ const AuthContextProvider = (props) => {
                 isWatsonDiscovery,
                 isSeller,
                 isAdmin,
+                searchText,
                 dispatch,
                 jwtDispatch,
                 userDispatch,
                 dispatchSeller,
                 dispatchAdmin,
-                dispatchWatsonDiscovery
+                dispatchWatsonDiscovery,
+                dispatchSearch
             }}
         >
             {props.children}

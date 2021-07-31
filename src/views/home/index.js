@@ -54,10 +54,11 @@ class Dashboard extends Component {
         this.setState({ pageLoading: false });
     }
 
-    success = res => {
+    success = (res, search) => {
         this.setState({ errorMsg: "" });
-
-        const store = res.data.map((item, ind) => {
+        console.log('res', res)
+        const response = search ? res : res.data
+        const store = response.map((item, ind) => {
             if(ind < 100) {
                 const buffer = this.arrayBufferToBase64(item?.image_buffer?.data);
                 const imga = 'data:image/png;base64,' + buffer
@@ -90,7 +91,32 @@ class Dashboard extends Component {
         this.setState({productsList: store})
     }
 
+    async componentDidUpdate() {
+        const {searchText, dispatchSearch} = this.props.context
+        if(searchText.length > 2) {
+            // this.setState({ pageLoading: true });
+            const request = {
+                product_name: searchText,
+            }
+            try {
+                debugger
+                const res = await Core.searchProducts(request);
+                if (res) {
+                    this.success(res, true)
+                }
+            } catch (error) {
+                // this.setState({ errorMsg: "Error fetching products" });
+                handleError(error);
+            }
+            // this.setState({ pageLoading: false });
+        }
+        dispatchSearch({ type: "SEARCH-HOME", res: '' })
+        console.log('searchText2', searchText)
+    }
+
     render() {
+        const {searchText} = this.props.context
+        console.log('searchText', searchText)
         return (
             <div className="listing-section">
                 {this.state.pageLoading ? <Loading /> : ""}

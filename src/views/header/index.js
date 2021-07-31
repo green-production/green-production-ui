@@ -72,6 +72,7 @@ class Header extends Component {
         super(props);
         this.state = {
             pageLoading: true,
+            search: "",
         };
     }
 
@@ -95,16 +96,33 @@ class Header extends Component {
         this.props.history.push("/discover");
     };
 
+    searchChange = (e) => {
+        this.setState({ search: e.target.value });
+    };
+
+    enterKey = (e) => {
+        if (e.code === "Enter") {
+            this.hitSearch();
+        }
+    };
+
+    hitSearch = (e) => {
+        const {dispatchSearch} = this.props.context
+        dispatchSearch({ type: "SEARCH-HOME", res: this.state.search })
+        this.setState({ search: '' });
+    };
+
     render() {
         const { isAuthenticated, isSeller, isWatsonDiscovery, userDetails } =
             this.context;
-        const profilePath = { 
-            pathname: "/profile", 
-            param: "edit" 
+        const { search } = this.state;
+        const profilePath = {
+            pathname: "/profile",
+            param: "edit",
         };
-        const changePassword = { 
-            pathname: "/settings", 
-            param: "security" 
+        const changePassword = {
+            pathname: "/settings",
+            param: "security",
         };
         return (
             <header
@@ -113,7 +131,11 @@ class Header extends Component {
             >
                 {this.state.pageLoading ? <Loading /> : ""}
                 {!isWatsonDiscovery && (
-                    <Carousel autoPlay={true} infiniteLoop={true} interval={5000}>
+                    <Carousel
+                        autoPlay={true}
+                        infiniteLoop={true}
+                        interval={5000}
+                    >
                         <div>
                             <img src={banner} alt="banner image" />
                         </div>
@@ -165,8 +187,7 @@ class Header extends Component {
                                 About us
                             </Link>
                         </li>
-                        {
-                            isSeller &&
+                        {isSeller && (
                             <li>
                                 <a
                                     title="Design Corner"
@@ -178,7 +199,10 @@ class Header extends Component {
                                 </a>
                                 <ul>
                                     <li>
-                                        <Link title="Seller account" to="/seller">
+                                        <Link
+                                            title="Seller account"
+                                            to="/seller"
+                                        >
                                             View Account
                                         </Link>
                                     </li>
@@ -193,9 +217,12 @@ class Header extends Component {
                                         </a>
                                         <ul>
                                             <li>
-                                            <Link title="Upload Items" to="/seller-upload">
-                                                Upload Items
-                                            </Link>
+                                                <Link
+                                                    title="Upload Items"
+                                                    to="/seller-upload"
+                                                >
+                                                    Upload Items
+                                                </Link>
                                             </li>
                                             <li>
                                                 <a
@@ -211,7 +238,7 @@ class Header extends Component {
                                     </li>
                                 </ul>
                             </li>
-                        }
+                        )}
                         <li>
                             <a
                                 title="Products"
@@ -249,38 +276,58 @@ class Header extends Component {
                                 Contact Us
                             </Link>
                         </li>
-                        {
-                            this.props.history?.location?.pathname === '/' &&
+                        {this.props.history?.location?.pathname === "/" && (
                             <li className="product-search">
                                 <div className="header-search">
                                     <div className="input-field first-wrap">
                                         <div className="input-select">
-                                        <select data-trigger="" name="choices-single-defaul" className="choices-single-defaul">
-                                            <option placeholder="">Category</option>
-                                            <option>New Arrivals</option>
-                                            <option>Eco friendly only</option>
-                                            <option>Her/She</option>
-                                            <option>Him/He</option>
-                                            <option>Clothing</option>
-                                            <option>Footwear</option>
-                                            <option>Electronics</option>
-                                            <option>Domestic appliances</option>
-                                            <option>Accessories</option>
-                                        </select>
+                                            <select
+                                                data-trigger=""
+                                                name="choices-single-defaul"
+                                                className="choices-single-defaul"
+                                            >
+                                                <option placeholder="">
+                                                    Category
+                                                </option>
+                                                <option>New Arrivals</option>
+                                                <option>
+                                                    Eco friendly only
+                                                </option>
+                                                <option>Her/She</option>
+                                                <option>Him/He</option>
+                                                <option>Clothing</option>
+                                                <option>Footwear</option>
+                                                <option>Electronics</option>
+                                                <option>
+                                                    Domestic appliances
+                                                </option>
+                                                <option>Accessories</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="input-field second-wrap">
-                                        <input id="search" type="text" placeholder="Search products" />
+                                        <input
+                                            id="search"
+                                            type="text"
+                                            value={search}
+                                            placeholder="Search products"
+                                            onKeyUp={this.enterKey}
+                                            onChange={this.searchChange}
+                                        />
                                     </div>
                                     <div className="input-field third-wrap">
-                                        <button className="btn-search" type="button">
-                                            <FaSearch/>
+                                        <button
+                                            className="btn-search"
+                                            type="button"
+                                            onClick={this.hitSearch}
+                                        >
+                                            <FaSearch />
                                         </button>
                                     </div>
                                 </div>
                             </li>
-                        }
-                        
+                        )}
+
                         {isAuthenticated ? (
                             <li className="profile-menu">
                                 <ul className="profile-wrapper">
@@ -304,13 +351,19 @@ class Header extends Component {
 
                                             <ul className="menu">
                                                 <li>
-                                                    <Link to={profilePath}>Edit</Link>
+                                                    <Link to={profilePath}>
+                                                        Edit
+                                                    </Link>
                                                 </li>
                                                 <li>
-                                                <Link to="/settings">Settings</Link>
+                                                    <Link to="/settings">
+                                                        Settings
+                                                    </Link>
                                                 </li>
                                                 <li>
-                                                <Link to={changePassword}>Change Password</Link>
+                                                    <Link to={changePassword}>
+                                                        Change Password
+                                                    </Link>
                                                 </li>
                                                 <li>
                                                     <GoogleLogout

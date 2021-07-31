@@ -12,6 +12,8 @@ const authReducer = (state, action) => {
             return action.res
         case "IS-ADMIN":
             return action.res
+        case "SEARCH-HOME":
+            return action.res
         default:
             return state;
     }
