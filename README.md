@@ -1,6 +1,6 @@
 # GREENYTALE
 
-Dive into the web application - https://greenytale.herokuapp.com/
+Dive into the web application - ### https://greenytale.herokuapp.com/
 
 GreenyTale is an e-commerce web platform which addresses the problem of goal number 12 of UN and provides solution to sustainable consumption and production patterns in muliple ways.
 GreenyTale attempts not only to create a circular economy around the world but also make a strong ethical and ecological impression on the users to aim self sustainance.
@@ -17,7 +17,6 @@ GreenyTale attempts not only to create a circular economy around the world but a
 
 
 # This project was created using React.
-# Getting Started with Create React App
 
 ## Available Scripts
 
