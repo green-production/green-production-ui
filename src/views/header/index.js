@@ -113,7 +113,7 @@ class Header extends Component {
             >
                 {this.state.pageLoading ? <Loading /> : ""}
                 {!isWatsonDiscovery && (
-                    <Carousel autoPlay={true} infiniteLoop={true}>
+                    <Carousel autoPlay={true} infiniteLoop={true} interval={5000}>
                         <div>
                             <img src={banner} alt="banner image" />
                         </div>
@@ -121,16 +121,16 @@ class Header extends Component {
                             <img src={climate1} alt="climate image" />
                         </div>
                         <div>
-                            <img src={climate2} alt="climate image" />
-                        </div>
-                        <div>
-                            <img src={climate3} alt="climate image" />
-                        </div>
-                        <div>
                             <img src={climate4} alt="climate image" />
                         </div>
                         <div>
+                            <img src={climate2} alt="climate image" />
+                        </div>
+                        <div>
                             <img src={climate5} alt="climate image" />
+                        </div>
+                        <div>
+                            <img src={climate3} alt="climate image" />
                         </div>
                         <div>
                             <img src={climate6} alt="climate image" />
